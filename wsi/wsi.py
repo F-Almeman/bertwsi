@@ -106,7 +106,7 @@ class WordSenseInductor:
         '''
         scores2010,corr = self._perform_wsi_on_ds_gen(
             'SemEval2010',
-            generate_sem_eval_2010_no_tokenization('./resources/SemEval-2010/test_data'),
+            generate_sem_eval_2010_no_tokenization('bertwsi/resources/SemEval-2010/test_data'),
             wsisettings,
             lambda inst2sense, outkey:
             evaluate_labeling_2010('bertwsi/resources/SemEval-2010/evaluation/', inst2sense, outkey),
