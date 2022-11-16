@@ -59,6 +59,6 @@ if __name__ == '__main__':
 
     word_sense_inductor = WordSenseInductor(lm)
 
-    scores2010, scores2013 = word_sense_inductor.run(settings,
+    scores2010 = word_sense_inductor.run(settings,
                                                      print_progress=True)
-    logging.info('full results: %s' % ((scores2013,scores2010),))
+    logging.info('full results: %s' % ((scores2010),))
