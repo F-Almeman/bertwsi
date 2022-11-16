@@ -85,6 +85,7 @@ class WordSenseInductor:
         # so semeval_dataset_by_target['book.n']['book.n.12'] is the sentence tokens of the 'book.n.12' instance
         # and the index of book in these tokens
 
+        '''
         scores2013,corr = self._perform_wsi_on_ds_gen(
             'SemEval2013',
             generate_sem_eval_2013_no_tokenization('./resources/SemEval-2013-Task-13-test-data'),
@@ -102,7 +103,7 @@ class WordSenseInductor:
         logging.info(msg)
         if print_progress:
             print(msg)
-
+        '''
         scores2010,corr = self._perform_wsi_on_ds_gen(
             'SemEval2010',
             generate_sem_eval_2010_no_tokenization('./resources/SemEval-2010/test_data'),
@@ -123,4 +124,5 @@ class WordSenseInductor:
         if print_progress:
             print(msg)
 
-        return scores2010['all'], scores2013['all']
+        #return scores2010['all'], scores2013['all']
+        return scores2010['all']
