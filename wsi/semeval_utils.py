@@ -67,7 +67,7 @@ def generate_sem_eval_2010_no_tokenization(dir_path: str):
         with open(cache_file_path, 'rb') as fin:
             cached = pickle.load(fin)
     else:
-        nlp = spacy.load('en', disable=['ner'])
+        nlp = spacy.load('en_core_web_sm', disable=['ner'])
         additional_mapping = {'stuck': 'stick', 'straightened': 'straighten', 'shaved': 'shave', 'shaving': 'shave',
                               'swam': 'swim', 'figgere': 'figure', 'violating': 'violate', 'lain': 'lie', 'lied': 'lie',
                               'figger': 'figure', 'swore': 'swear', 'swears': 'swear', 'observed': 'observe',
