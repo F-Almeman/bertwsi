@@ -11,8 +11,8 @@ with zipfile.ZipFile("./resources/semeval-2013-task-13-test-data.zip","r") as zi
 EOF
 
 echo downloading SemEval 2010 task 14 data and evaluation code...
-wget https://www.cs.york.ac.uk/semeval2010_WSI/files/evaluation.zip  -O resources/se2010eval.zip
-wget https://www.cs.york.ac.uk/semeval2010_WSI/files/test_data.tar.gz  -O resources/se2010test_data.tar.gz
+wget --no-check-certificate https://www.cs.york.ac.uk/semeval2010_WSI/files/evaluation.zip  -O resources/se2010eval.zip
+wget --no-check-certificate https://www.cs.york.ac.uk/semeval2010_WSI/files/test_data.tar.gz  -O resources/se2010test_data.tar.gz
 mkdir -p resources/SemEval-2010
 python - <<EOF
 import zipfile
