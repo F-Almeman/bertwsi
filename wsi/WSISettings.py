@@ -11,7 +11,7 @@ DEFAULT_PARAMS = WSISettings(
     n_samples_per_rep=20,
     cuda_device=1,
     debug_dir='debug',
-    disable_lemmatization=True,
+    disable_lemmatization=False,
     disable_tfidf=False,
     patterns=[('{pre} {target} (or even {mask_predict}) {post}', 0.4),
               ('{pre} {target_predict} {post}', 0.4)],
