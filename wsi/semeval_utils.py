@@ -72,7 +72,8 @@ def generate_sem_eval_2010_no_tokenization(dir_path: str):
                               'swam': 'swim', 'figgere': 'figure', 'violating': 'violate', 'lain': 'lie', 'lied': 'lie',
                               'figger': 'figure', 'swore': 'swear', 'swears': 'swear', 'observed': 'observe',
                               'committed': 'commit', 'divided': 'divide', 'lie': 'lay', 'lay': 'lie', 'lah': 'lie',
-                              'swimming': 'swim', 'relaxes': 'relax'}
+                              'swimming': 'swim', 'relaxes': 'relax', 'caresses': 'caress', 'dilates': 'dilate', 'increases':'increase',
+                             'providing':'provide', 'easier':'easy'}
 
         def basic_stem(w):
             if w[-1] == 's':
