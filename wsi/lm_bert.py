@@ -54,7 +54,7 @@ class LMBert(SLM):
             self.original_vocab = []
 
             import spacy
-            nlp = spacy.load("en_core_web_sm", disable=['ner', 'parser'])
+            nlp = spacy.load("en", disable=['ner', 'parser'])
             self._lemmas_cache = {}
             self._spacy = nlp
             for spacyed in tqdm(
