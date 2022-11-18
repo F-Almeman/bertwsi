@@ -54,11 +54,11 @@ class LMBert(SLM):
             self.original_vocab = []
 
             import spacy
-            nlp = spacy.load("en", disable=['ner', 'parser'])
+            nlp = spacy.load("en_core_web_sm"", disable=['ner', 'parser'])
             self._lemmas_cache = {}
             self._spacy = nlp
             for spacyed in tqdm(
-                    nlp.pipe(self.tokenizer.vocab.keys(), batch_size=1000),
+                    nlp.pipe(self.tokenizer.vocab.keys(), batch_size=1000, n_threads=multiprocessing.cpu_count()),
                     total=len((self.tokenizer.vocab)), desc='lemmatizing vocab'):
                 lemma = spacyed[0].lemma_ if spacyed[0].lemma_ != '-PRON-' else spacyed[0].lower_
                 self._lemmas_cache[spacyed[0].lower_] = lemma
