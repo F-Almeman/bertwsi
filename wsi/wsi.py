@@ -28,6 +28,7 @@ class WordSenseInductor:
             inst_ids_to_representatives = \
                 self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
+            print(inst_ids_to_representatives)
 
             clusters, statistics = cluster_inst_ids_representatives(
                 inst_ids_to_representatives=inst_ids_to_representatives,
