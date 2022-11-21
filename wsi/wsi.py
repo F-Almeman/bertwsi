@@ -34,8 +34,6 @@ class WordSenseInductor:
             for key in inst_ids_to_representatives:
                 print(key)
                 print(inst_id_to_sentence[key])
-                print(len(inst_ids_to_representatives[key]))
-                print(inst_ids_to_representatives[key])
                 for representative in inst_ids_to_representatives[key]:
                     print(representative)
 
