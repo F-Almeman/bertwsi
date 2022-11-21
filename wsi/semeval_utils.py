@@ -124,13 +124,13 @@ def generate_sem_eval_2010_no_tokenization(dir_path: str):
                             raise Exception('Could not pin-point lemma in SemEval sentence')
 
                         # pre = pres_sent + ' ' + ''.join(parsed[i].string for i in range(first_occur_idx))
-                        pre = ''.join(parsed[i].text for i in range(first_occur_idx))
+                        pre = ' '.join(parsed[i].text for i in range(first_occur_idx))
                         ambig = parsed[first_occur_idx].text
-                        post = ''.join(
+                        post = ' '.join(
                             parsed[i].text for i in range(first_occur_idx + 1, len(parsed)))  # + ' ' + post_sent
 
-                        pre = pre.replace(" 's ", "'s ")
-                        post = post.replace(" 's ", "'s ")
+                        #pre = pre.replace(" 's ", "'s ")
+                        #post = post.replace(" 's ", "'s ")
                         cached.append((pre, ambig, post, inst_name))
         try:
             with open(cache_file_path, 'wb') as fout:
