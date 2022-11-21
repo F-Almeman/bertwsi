@@ -34,7 +34,8 @@ class WordSenseInductor:
             for key in inst_ids_to_representatives:
                 print(key)
                 print(inst_id_to_sentence[key])
-                print(inst_ids_to_representatives[key])
+                for i in len(inst_ids_to_representatives[key]):
+                    print(inst_ids_to_representatives[key][i])
 
             clusters, statistics = cluster_inst_ids_representatives(
                 inst_ids_to_representatives=inst_ids_to_representatives,
