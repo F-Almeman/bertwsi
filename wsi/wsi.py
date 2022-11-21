@@ -29,7 +29,7 @@ class WordSenseInductor:
             inst_ids_to_representatives = \
                 self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
-            print("\n*************lemma_pos: "+ lemma_pos)
+            print("\n*************\nlemma_pos: "+ lemma_pos)
             for key in inst_ids_to_representatives:
                 print("\ninstance_id: "+key)
                 print("sentence: ")
