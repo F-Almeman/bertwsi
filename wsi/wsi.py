@@ -32,7 +32,9 @@ class WordSenseInductor:
             print("\nlemma_pos: "+ lemma_pos)
             for key in inst_ids_to_representatives:
                 print("instance_id: "+key)
-                print("sentence: "+inst_id_to_sentence[key])
+                print("sentence: ")
+                print(inst_id_to_sentence[key])
+                print("lexical substitutes:")
                 for count, representative in enumerate(inst_ids_to_representatives[key]):
                     print(count, representative)
 
