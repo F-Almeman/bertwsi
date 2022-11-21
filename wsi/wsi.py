@@ -29,13 +29,12 @@ class WordSenseInductor:
             inst_ids_to_representatives = \
                 self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
-            print("\nlemma_pos\n")
-            print(lemma_pos)
+            print("\nlemma_pos: "+ lemma_pos)
             for key in inst_ids_to_representatives:
-                print(key)
-                print(inst_id_to_sentence[key])
-                for representative in inst_ids_to_representatives[key]:
-                    print(representative)
+                print("instance_id: "+key)
+                print("sentence: "+inst_id_to_sentence[key])
+                for count, representative in enumerate(inst_ids_to_representatives[key]):
+                    print(count, representative)
 
             clusters, statistics = cluster_inst_ids_representatives(
                 inst_ids_to_representatives=inst_ids_to_representatives,
