@@ -38,6 +38,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     print("inst_ids_ordered"+str(len(inst_ids_ordered)))
     dict_vectorizer = DictVectorizer(sparse=False)
     rep_mat = dict_vectorizer.fit_transform(representatives)
+    print(type(rep_mat))
+    print(len(rep_mat))
+    print(rep_mat)
     # to_pipeline = [dict_vectorizer]
     if disable_tfidf:
         transformed = rep_mat
