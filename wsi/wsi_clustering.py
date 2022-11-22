@@ -33,6 +33,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     logging.info('clustering lemma %s' % lemma)
     representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
     n_represent = len(representatives) // len(inst_ids_ordered)
+    print("n_represent"+str(n_represent))
+    print("representatives"+str(len(representatives)))
+    print("inst_ids_ordered"+str(len(inst_ids_ordered)))
     dict_vectorizer = DictVectorizer(sparse=False)
     rep_mat = dict_vectorizer.fit_transform(representatives)
     # to_pipeline = [dict_vectorizer]
