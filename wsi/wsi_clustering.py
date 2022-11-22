@@ -38,6 +38,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     print("inst_ids_ordered"+str(len(inst_ids_ordered)))
     dict_vectorizer = DictVectorizer(sparse=False)
     rep_mat = dict_vectorizer.fit_transform(representatives)
+    print(representatives[0])
     print(type(rep_mat))
     print(len(rep_mat))
     print(rep_mat)
