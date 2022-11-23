@@ -50,7 +50,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
 
     labels = fcluster(Z, distance_crit,
                       'distance') - 1
-
+    print("labels")
+    print(labels)
     n_senses = np.max(labels) + 1
     print("n_senses")
     print(n_senses)
