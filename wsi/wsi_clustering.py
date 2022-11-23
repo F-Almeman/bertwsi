@@ -64,12 +64,14 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         print("inst_id_clusters")
         print(inst_id_clusters)
         instance_senses[inst_id] = inst_id_clusters
+        print(inst_id_clusters.most_common()[0][0])
         senses_n_domminates[inst_id_clusters.most_common()[0][0]] += 1
         print("senses_n_domminates")
         print(senses_n_domminates)
 
     big_senses = [x for x in senses_n_domminates if senses_n_domminates[x] >= min_sense_instances]
-
+    print("big_senses")
+    print(big_senses)
     sense_means = np.zeros((n_senses, transformed.shape[1]))
     for sense_idx in range(n_senses):
         idxs_this_sense = np.where(labels == sense_idx)
