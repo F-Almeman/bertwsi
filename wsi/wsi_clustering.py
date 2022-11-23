@@ -52,14 +52,20 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
                       'distance') - 1
 
     n_senses = np.max(labels) + 1
+    print("n_senses")
+    print(n_senses)
 
     senses_n_domminates = Counter()
     instance_senses = {}
     for i, inst_id in enumerate(inst_ids_ordered):
         inst_id_clusters = Counter(labels[i * n_represent:
                                           (i + 1) * n_represent])
+        print("inst_id_clusters")
+        print(inst_id_clusters)
         instance_senses[inst_id] = inst_id_clusters
         senses_n_domminates[inst_id_clusters.most_common()[0][0]] += 1
+        print("senses_n_domminates")
+        print(senses_n_domminates)
 
     big_senses = [x for x in senses_n_domminates if senses_n_domminates[x] >= min_sense_instances]
 
