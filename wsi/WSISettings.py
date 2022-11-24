@@ -12,7 +12,7 @@ DEFAULT_PARAMS = WSISettings(
     cuda_device=1,
     debug_dir='debug',
     disable_lemmatization=True,
-    disable_tfidf=False,
+    disable_tfidf=True,
     patterns=[('{pre} {target} (or even {mask_predict}) {post}', 0.4),
               ('{pre} {target_predict} {post}', 0.4)],
     # (pattern,weight): each of these patterns will produce a prediction state.
