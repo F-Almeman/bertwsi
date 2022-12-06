@@ -41,6 +41,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
 
+    
     metric = 'cosine'
     method = 'average'
     dists = pdist(transformed, metric=metric)
@@ -58,10 +59,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     for i, inst_id in enumerate(inst_ids_ordered):
         inst_id_clusters = Counter(labels[i * n_represent:
                                           (i + 1) * n_represent])
-       
         instance_senses[inst_id] = inst_id_clusters
         senses_n_domminates[inst_id_clusters.most_common()[0][0]] += 1
-
 
     big_senses = [x for x in senses_n_domminates if senses_n_domminates[x] >= min_sense_instances]
     sense_means = np.zeros((n_senses, transformed.shape[1]))
