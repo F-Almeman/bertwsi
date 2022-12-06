@@ -1,6 +1,6 @@
 tqdm==4.26.0
-pytorch_pretrained_bert
-torch
+pytorch_pretrained_bert==0.6.2
+torch==1.13.0
 numpy==1.15.1
 spacy==2.1.3
 scipy==1.1.0
