@@ -1,8 +1,8 @@
-tqdm==4.64.1 
-pytorch_pretrained_bert==0.6.2
-torch==1.13.0
+tqdm==4.26.0
+pytorch_pretrained_bert
+torch
 numpy==1.15.1
-spacy==3.4.3
+spacy
 scipy==1.1.0
 scikit_learn==0.21.1
 typing==3.6.6
