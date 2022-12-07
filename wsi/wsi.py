@@ -30,12 +30,13 @@ class WordSenseInductor:
                                                                   wsisettings=wsisettings)
             
             
-            print("**************"+lemma_pos+"\n")
+            print("**************"+"\n"+lemma_pos+"\n")
             for ids in inst_id_to_sentence:
-                print(ids)
+                print("\n"+ids)
                 print(inst_id_to_sentence[ids])
                 for i in inst_ids_to_representatives[ids]:
                     print(i)
+                
             
             clusters, statistics = cluster_inst_ids_representatives(
                 inst_ids_to_representatives=inst_ids_to_representatives,
