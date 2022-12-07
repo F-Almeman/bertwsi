@@ -30,7 +30,7 @@ class WordSenseInductor:
                                                                   wsisettings=wsisettings)
             
             
-            print("**************"+lemma_pos+\n)
+            print("**************"+lemma_pos+"\n")
             for ids in inst_id_to_sentence:
                 print(ids)
                 print(inst_id_to_sentence[ids])
