@@ -67,7 +67,7 @@ def generate_sem_eval_2010_no_tokenization(dir_path: str):
         with open(cache_file_path, 'rb') as fin:
             cached = pickle.load(fin)
     else:
-        nlp = spacy.load('en_core_web_sm', disable=['ner'])
+        nlp = spacy.load('en', disable=['ner'])
         additional_mapping = {'stuck': 'stick', 'straightened': 'straighten', 'shaved': 'shave', 'shaving': 'shave',
                               'swam': 'swim', 'figgere': 'figure', 'violating': 'violate', 'lain': 'lie', 'lied': 'lie',
                               'figger': 'figure', 'swore': 'swear', 'swears': 'swear', 'observed': 'observe',
@@ -124,10 +124,10 @@ def generate_sem_eval_2010_no_tokenization(dir_path: str):
                             raise Exception('Could not pin-point lemma in SemEval sentence')
 
                         # pre = pres_sent + ' ' + ''.join(parsed[i].string for i in range(first_occur_idx))
-                        pre = ''.join(parsed[i].text for i in range(first_occur_idx))
+                        pre = ''.join(parsed[i].string for i in range(first_occur_idx))
                         ambig = parsed[first_occur_idx].text
                         post = ''.join(
-                            parsed[i].text for i in range(first_occur_idx + 1, len(parsed)))  # + ' ' + post_sent
+                            parsed[i].string for i in range(first_occur_idx + 1, len(parsed)))  # + ' ' + post_sent
 
                         pre = pre.replace(" 's ", "'s ")
                         post = post.replace(" 's ", "'s ")
