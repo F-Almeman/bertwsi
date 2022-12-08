@@ -40,7 +40,7 @@ class WordSenseInductor:
                     definitions = row['DEFINITION']
                     break
                 
-            for inst_id, inst_def in in zip(inst_ids,definitions) :
+            for inst_id, inst_def in zip(inst_ids,definitions) :
                 inst_ids_to_representatives[inst_id].insert(0, inst_def)
             
             
