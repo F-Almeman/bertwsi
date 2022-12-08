@@ -23,4 +23,4 @@ EOF
 tar -C resources/SemEval-2010 -xzf resources/se2010test_data.tar.gz
 
 echo downloading BART generated definitions...
-wget https://drive.google.com/uc?export=download&id=1R5Pvevo9MW6mO2yymb8dvew_Z18VUxYT -O resources/bart_wsi_test_evaluation_n10_reranking.csv
+wget "https://drive.google.com/uc?export=download&id=1R5Pvevo9MW6mO2yymb8dvew_Z18VUxYT" -O resources/bart_wsi_test_evaluation_n10_reranking.csv
