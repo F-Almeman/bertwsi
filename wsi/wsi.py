@@ -28,7 +28,7 @@ class WordSenseInductor:
          
         # The generated definitions from dm model (WORD, WORD_ID, EXAMPLE, DEFINITION)
         df = pd.read_csv('./resources/bart_wsi_test_evaluation_2010_reranking.csv')
-        df = df.groupby(['WORD'], as_index=False)['WORD_ID','DEFINITION'].agg(lambda x: list(list(x)))
+        df = df.groupby(['WORD'], as_index=False)['WORD_ID','DEFINITION'].agg(lambda x: list(x))
         
         for lemma_pos, inst_id_to_sentence in gen:
             inst_ids_to_representatives = \
