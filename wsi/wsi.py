@@ -34,21 +34,24 @@ class WordSenseInductor:
             inst_ids_to_representatives = \
                 self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
-            #get the definitions for each inst_id  for that lemma_pos
+            
+            #get the definitions for each inst_id for that lemma_pos
             for index, row in df.iterrows():
                 if row['WORD'] == lemma_pos:
-                    inst_ids = row['WORD_ID']
-                    definitions = row['DEFINITION']
+                    inst_id_to_definition = {row['WORD_ID'][i]: row['DEFINITION'][i] for i in range(len(row['WORD_ID']))}
+                    #inst_ids = row['WORD_ID']
+                    #definitions = row['DEFINITION']
                     break
-                
+            '''
             for inst_id, inst_def in zip(inst_ids,definitions) :
                 inst_ids_to_representatives[inst_id].insert(0, inst_def)
-            
+            '''
             
             print("**************"+"\n"+lemma_pos+"\n")
             for ids in inst_id_to_sentence:
                 print("\n"+ids)
                 print(inst_id_to_sentence[ids])
+                print(inst_id_to_definition[ids])
                 for i in inst_ids_to_representatives[ids]:
                     print(i)
                 
