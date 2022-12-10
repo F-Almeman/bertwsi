@@ -48,6 +48,7 @@ class WordSenseInductor:
             '''
             
             print("**************"+"\n"+lemma_pos+"\n")
+            print(inst_id_to_definition)
             for ids in inst_id_to_sentence:
                 print("\n"+ids)
                 print(inst_id_to_sentence[ids])
