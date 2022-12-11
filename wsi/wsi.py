@@ -39,16 +39,9 @@ class WordSenseInductor:
             for index, row in df.iterrows():
                 if row['WORD'] == lemma_pos:
                     inst_id_to_definition = {row['WORD_ID'][i]: row['DEFINITION'][i] for i in range(len(row['WORD_ID']))}
-                    #inst_ids = row['WORD_ID']
-                    #definitions = row['DEFINITION']
                     break
-            '''
-            for inst_id, inst_def in zip(inst_ids,definitions) :
-                inst_ids_to_representatives[inst_id].insert(0, inst_def)
-            '''
             
             print("**************"+"\n"+lemma_pos+"\n")
-            print(inst_id_to_definition)
             for ids in inst_id_to_sentence:
                 print("\n"+ids)
                 print(inst_id_to_sentence[ids])
