@@ -34,9 +34,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     #representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
     
     representatives = [(inst_id_to_definition[x],y) for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
-    
-    print(representatives)
-    
+    for r in representatives:
+      print(r)
+      
     n_represent = len(representatives) // len(inst_ids_ordered)
     dict_vectorizer = DictVectorizer(sparse=False)
     rep_mat = dict_vectorizer.fit_transform(representatives)
