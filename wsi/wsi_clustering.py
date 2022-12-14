@@ -18,7 +18,9 @@ import pickle
 
 def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], inst_id_to_definition:Dict[str, str] ,
                                      max_number_senses: float,min_sense_instances:int,
-                                     disable_tfidf: bool, explain_features: bool) -> Tuple[Dict[str, Dict[str, int]], List]:global gold_n_senses
+                                     disable_tfidf: bool, explain_features: bool) -> -> Tuple[
+    Dict[str, Dict[str, int]], List]:
+    global gold_n_senses
     """
     preforms agglomerative clustering on representatives of one SemEval target
     :param inst_ids_to_representatives: map from SemEval instance id to list of representatives
