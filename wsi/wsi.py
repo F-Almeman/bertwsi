@@ -53,7 +53,7 @@ class WordSenseInductor:
             
             
             clusters, statistics = cluster_inst_ids_representatives(
-                inst_ids_to_representatives=inst_ids_to_representatives,
+                inst_ids_to_representatives=inst_ids_to_representatives, inst_id_to_definition=inst_id_to_definition,
                 max_number_senses=wsisettings.max_number_senses,min_sense_instances=wsisettings.min_sense_instances,
                 disable_tfidf=wsisettings.disable_tfidf,explain_features=True)
             inst_id_to_sense.update(clusters)
