@@ -10,6 +10,8 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
 
+from sentence_transformers import SentenceTransformer
+
 import pickle
 
 # with open('gold_n_senses.pickle', 'rb') as fin:
@@ -28,16 +30,23 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     :param disable_tfidf: disable tfidf processing of feature words
     :return: map from SemEval instance id to soft membership of clusters and their weight
     """
+    
+    def combine(rep_vec: list, def_vec: list):
+      new_embed = []
+      for vec in rep_vec:
+        embed = np.concatenate(def_vec, vec)
+        new_embed.append(embed)
+      return new_embed
+        
+    
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
     logging.info('clustering lemma %s' % lemma)
-    #representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
-    
-    representatives = [(inst_id_to_definition[x],y) for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
-    for r in representatives:
-      print(r)
-      
+    representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
     n_represent = len(representatives) // len(inst_ids_ordered)
+    
+    definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]
+    
     dict_vectorizer = DictVectorizer(sparse=False)
     rep_mat = dict_vectorizer.fit_transform(representatives)
     # to_pipeline = [dict_vectorizer]
@@ -47,9 +56,18 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
 
     
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    definitions_embeddings = model.encode(definitions)
+    
+    combined_embeddings = []
+    for i, inst_id in enumerate(inst_ids_ordered):
+        combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
+        combined_embeddings.append(combined_embed)
+    
+    
     metric = 'cosine'
     method = 'average'
-    dists = pdist(transformed, metric=metric)
+    dists = pdist(combined_embeddings, metric=metric)
     Z = linkage(dists, method=method, metric=metric)
 
     distance_crit = Z[-max_number_senses, 2]
@@ -138,5 +156,5 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
 
             # logging.info(f'sense #{sense_idx+1} ({label_count[sense_idx]} reps) best features: {best_features}')
             statistics.append((count_reps, best_features, best_features_pmi, closest_instance))
-
+    
     return senses, statistics
