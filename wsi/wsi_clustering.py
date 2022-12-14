@@ -16,11 +16,9 @@ import pickle
 #     gold_n_senses = pickle.load(fin)
 
 
-def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]],
+def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], inst_id_to_definition:Dict[str, str] ,
                                      max_number_senses: float,min_sense_instances:int,
-                                     disable_tfidf: bool, explain_features: bool) -> Tuple[
-    Dict[str, Dict[str, int]], List]:
-    global gold_n_senses
+                                     disable_tfidf: bool, explain_features: bool) -> Tuple[Dict[str, Dict[str, int]], List]:global gold_n_senses
     """
     preforms agglomerative clustering on representatives of one SemEval target
     :param inst_ids_to_representatives: map from SemEval instance id to list of representatives
@@ -31,7 +29,12 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
     logging.info('clustering lemma %s' % lemma)
-    representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
+    #representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
+    
+    representatives = [(inst_id_to_definition[x],y) for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
+    
+    print(representatives)
+    
     n_represent = len(representatives) // len(inst_ids_ordered)
     dict_vectorizer = DictVectorizer(sparse=False)
     rep_mat = dict_vectorizer.fit_transform(representatives)
