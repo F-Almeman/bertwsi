@@ -34,6 +34,10 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     def combine(rep_vec: list, def_vec: list):
       new_embed = []
       for vec in rep_vec:
+        print(type(vec))
+        print(vec.shape)
+        print(type(def_vec))
+        print(def_vec.shape)
         embed = np.concatenate(def_vec, vec)
         new_embed.append(embed)
       return new_embed
