@@ -36,7 +36,11 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert fom matrix to array
         embed = np.concatenate((def_vec, vec_1)) # Its shape is (997,)
+        print(embed.shape)
+        print(type(embed))
         np.append(new_embed, embed)
+      print(new_embed.shape)
+      print(type(new_embed))
       return new_embed
         
     
@@ -63,6 +67,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'> (1, 971)" and definitions' embeddings "<class 'numpy.ndarray'> (384,)"
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
+        print(combined_embed.shape)
+        print(type(combined_embed))
         np.append(combined_embeddings, combined_embed)
     
     print(type(combined_embeddings))
