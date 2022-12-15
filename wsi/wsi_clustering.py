@@ -35,11 +35,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1
-        print(type(vec_1))
-        print(vec_1.shape)
-        print(type(def_vec))
-        print(def_vec.shape)
         embed = np.concatenate((def_vec, vec_1))
+        print(type(embed))
+        pritn(embed.shape)
         new_embed.append(embed)
       return new_embed
         
@@ -60,6 +58,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
 
+    print(type(transformed))
+    print(transformed.shape)
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions_embeddings = model.encode(definitions)
     
@@ -70,6 +70,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         combined_embeddings.append(combined_embed)
     
     nd_combined_embeddings = np.array(combined_embeddings)
+    print(type(nd_combined_embeddings))
+    print(nd_combined_embeddings.shape)
     metric = 'cosine'
     method = 'average'
     dists = pdist(combined_embeddings, metric=metric) 
