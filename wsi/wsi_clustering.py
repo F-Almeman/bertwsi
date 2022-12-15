@@ -31,27 +31,14 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     :return: map from SemEval instance id to soft membership of clusters and their weight
     """
     
-    '''
-    def combine(rep_vec, def_vec):
+    def combine(rep_vec, def_vec):                         
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert fom matrix to array
         embed = np.concatenate((def_vec, vec_1))
         new_embed.append(embed)
       return new_embed
-     '''   
-    
-    def combine(rep_vec, def_vec):
-      new_embed = []
-      for vec in rep_vec:
-        embed = np.concatenate((def_vec, vec))
-        print(len(embed))
-        print(type(embed))
-        new_embed.append(embed)
-      print(len(new_embed))
-      print(type(new_embed))
-      return new_embed
-    
+      
     
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
@@ -59,7 +46,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
     n_represent = len(representatives) // len(inst_ids_ordered)
     
-    definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]
+    definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]  
     
     dict_vectorizer = DictVectorizer(sparse=False)
     rep_mat = dict_vectorizer.fit_transform(representatives)
@@ -69,27 +56,14 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
 
-    transformed = transformed.A1
-    print(transformed.shape)
-    print(type(transformed))
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions_embeddings = model.encode(definitions)
     
-    '''
+  
     combined_embeddings = []
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'>" and definitions' embeddings "<class 'numpy.ndarray'>"
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
-        print(len(combined_embed))
-        print(type(combined_embed))
-        combined_embeddings.append(combined_embed)
-    '''
-    combined_embeddings = []
-    for i, inst_id in enumerate(inst_ids_ordered):
-        # combine representatives' vectors "<class 'numpy.matrix'>" and definitions' embeddings "<class 'numpy.ndarray'>"
-        combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
-        print(len(combined_embed))
-        print(type(combined_embed))
         combined_embeddings.append(combined_embed)
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
