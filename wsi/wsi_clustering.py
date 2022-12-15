@@ -33,11 +33,15 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     
     def combine(rep_vec, def_vec):
       new_embed = []
+      print(type(rep_vec))
+      print(len(rep_vec))
+      print(type(def_vec))
+      print(len(def_vec))
       for vec in rep_vec:
-        vec_1 = np.ravel(vec)
-        embed = np.concatenate((def_vec, vec_1)) 
-        new_embed.append(embed)
-      return new_embed
+        print(type(vec))
+        print(len(vec))
+        #new_embed.append(embed)
+      #return new_embed
         
     
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
@@ -56,7 +60,6 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
 
-    print(type(transformed))
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions_embeddings = model.encode(definitions)
     
@@ -66,8 +69,6 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
         combined_embeddings.append(combined_embed)
     
-    print(type(combined_embeddings))
-    print(len(combined_embeddings))
     metric = 'cosine'
     method = 'average'
     dists = pdist(combined_embeddings, metric=metric) 
