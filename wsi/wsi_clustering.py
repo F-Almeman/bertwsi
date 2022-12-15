@@ -32,13 +32,11 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     """
     
     def combine(rep_vec, def_vec):
-      new_embed = []
+      new_embed = np.array([])
       for vec in rep_vec:
-        vec_1 = vec.A1
-        embed = np.concatenate((def_vec, vec_1))
-        print(type(embed))
-        print(embed.shape)
-        new_embed.append(embed)
+        vec_1 = vec.A1    # to convert fom matrix to array
+        embed = np.concatenate((def_vec, vec_1)) # Its shape is (997,)
+        np.append(new_embed, embed)
       return new_embed
         
     
@@ -58,20 +56,15 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
 
-    print(type(transformed))
-    print(transformed.shape)
-    
-    print(len(inst_ids_ordered))
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions_embeddings = model.encode(definitions)
     
-    combined_embeddings = []
+    combined_embeddings = np.array([])
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'> (1, 971)" and definitions' embeddings "<class 'numpy.ndarray'> (384,)"
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
-        combined_embeddings.append(combined_embed)
+        np.append(combined_embeddings, combined_embed)
     
-    nd_combined_embeddings = np.array(combined_embeddings)
     print(type(nd_combined_embeddings))
     print(nd_combined_embeddings.shape)
     metric = 'cosine'
