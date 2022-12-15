@@ -74,6 +74,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     combined_embeddings_v2 = [y for x in combined_embeddings for y in x]
     print(type(combined_embeddings_v2))
     print(combined_embeddings_v2.shape)
+    
+    combined_embeddings_v2 = np.array(combined_embeddings_v2)
+    
     metric = 'cosine'
     method = 'average'
     dists = pdist(combined_embeddings, metric=metric) 
