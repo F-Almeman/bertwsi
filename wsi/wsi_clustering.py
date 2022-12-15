@@ -37,7 +37,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         vec_1 = vec.A1
         embed = np.concatenate((def_vec, vec_1))
         print(type(embed))
-        pritn(embed.shape)
+        print(embed.shape)
         new_embed.append(embed)
       return new_embed
         
