@@ -32,13 +32,13 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     """
     
     def combine(rep_vec, def_vec):
-      new_embed = np.array([])
+      new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert fom matrix to array
         embed = np.concatenate((def_vec, vec_1)) # Its shape is (997,)
         print(embed.shape)
         print(type(embed))
-        new_embed = np.append(new_embed, embed)
+        new_embed.append(embed)
       print(new_embed.shape)
       print(type(new_embed))
       return new_embed
@@ -63,16 +63,17 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions_embeddings = model.encode(definitions)
     
-    combined_embeddings = np.array([])
+    combined_embeddings = []
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'> (1, 971)" and definitions' embeddings "<class 'numpy.ndarray'> (384,)"
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
         print(combined_embed.shape)
         print(type(combined_embed))
-        combined_embeddings = np.append(combined_embeddings, combined_embed)
+        combined_embeddings.append(combined_embed)
     
-    print(type(combined_embeddings))
-    print(combined_embeddings.shape)
+    combined_embeddings_v2 = [y for x in combined_embeddings for y in x]
+    print(type(combined_embeddings_v2))
+    print(combined_embeddings_v2.shape)
     metric = 'cosine'
     method = 'average'
     dists = pdist(combined_embeddings, metric=metric) 
