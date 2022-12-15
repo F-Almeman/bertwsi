@@ -65,7 +65,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     
     combined_embeddings = []
     for i, inst_id in enumerate(inst_ids_ordered):
-        # combine representatives' vectors "<class 'numpy.matrix'> (1, 971)" and definitions' embeddings "<class 'numpy.ndarray'> (384,)"
+        # combine representatives' vectors "<class 'numpy.matrix'>" and definitions' embeddings "<class 'numpy.ndarray'>"
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
         print(len(combined_embed))
         print(type(combined_embed))
@@ -82,7 +82,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     
     metric = 'cosine'
     method = 'average'
-    dists = pdist(combined_embeddings, metric=metric) 
+    dists = pdist(combined_embeddings_v2, metric=metric) 
     Z = linkage(dists, method=method, metric=metric)
 
     distance_crit = Z[-max_number_senses, 2]
