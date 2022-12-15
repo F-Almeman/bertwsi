@@ -60,6 +60,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
 
     print(type(transformed))
     print(transformed.shape)
+    
+    print(len(inst_ids_ordered))
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions_embeddings = model.encode(definitions)
     
