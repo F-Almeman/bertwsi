@@ -65,8 +65,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
         np.append(combined_embeddings, combined_embed)
     
-    print(type(nd_combined_embeddings))
-    print(nd_combined_embeddings.shape)
+    print(type(combined_embeddings))
+    print(combined_embeddings.shape)
     metric = 'cosine'
     method = 'average'
     dists = pdist(combined_embeddings, metric=metric) 
