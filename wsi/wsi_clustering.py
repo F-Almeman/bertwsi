@@ -35,11 +35,11 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert fom matrix to array
-        embed = np.concatenate((def_vec, vec_1)) # Its shape is (997,)
-        print(embed.shape)
+        embed = np.concatenate((def_vec, vec_1))
+        print(len(embed))
         print(type(embed))
         new_embed.append(embed)
-      print(new_embed.shape)
+      print(len(new_embed))
       print(type(new_embed))
       return new_embed
         
@@ -67,15 +67,18 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'> (1, 971)" and definitions' embeddings "<class 'numpy.ndarray'> (384,)"
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
-        print(combined_embed.shape)
+        print(len(combined_embed))
         print(type(combined_embed))
         combined_embeddings.append(combined_embed)
     
     combined_embeddings_v2 = [y for x in combined_embeddings for y in x]
     print(type(combined_embeddings_v2))
-    print(combined_embeddings_v2.shape)
+    print(len(combined_embeddings_v2))
     
     combined_embeddings_v2 = np.array(combined_embeddings_v2)
+    
+    print(combined_embeddings_v2.shape)
+    print(type(combined_embeddings_v2))
     
     metric = 'cosine'
     method = 'average'
