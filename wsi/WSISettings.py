@@ -28,5 +28,5 @@ DEFAULT_PARAMS = WSISettings(
 
     max_batch_size=10,
     prediction_cutoff=200,
-    bert_model='roberta-base'
+    bert_model='bert-base-uncased'
 )
