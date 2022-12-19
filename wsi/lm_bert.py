@@ -116,6 +116,8 @@ class LMBert(SLM):
         # else:
         #     patterns =[('{pre} {target} (or even {mask_predict}) {post}', 0.5)]
         patterns = wsisettings.patterns
+        print("***********patterns*************")
+        print(patterns)
         n_patterns = len(patterns)
         pattern_str, pattern_w = list(zip(*patterns))
         pattern_w = torch.from_numpy(np.array(pattern_w, dtype=np.float32).reshape(-1, 1)).to(device=self.device)
