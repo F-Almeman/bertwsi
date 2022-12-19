@@ -62,7 +62,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     #model = SentenceTransformer('all-MiniLM-L6-v2')
     #definitions_embeddings = model.encode(definitions)
     
-  '''
+    '''
     combined_embeddings = []
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'>" and definitions' embeddings "<class 'numpy.ndarray'>"
