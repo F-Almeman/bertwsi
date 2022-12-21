@@ -11,6 +11,7 @@ from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
 
 from sentence_transformers import SentenceTransformer
+from sklearn.decomposition import PCA
 
 import pickle
 
@@ -32,16 +33,17 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     """
     
     
-    def combine(rep_vec, def_vec):                         
+    def combine(rep_vec, def_vec, pca=False):                         
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert fom matrix to array
         embed = np.concatenate((def_vec, vec_1))
         new_embed.append(embed)
-      return new_embed
+      if pca == False:
+        return new_embed
+          
       
-     
-    
+   
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
     logging.info('clustering lemma %s' % lemma)
