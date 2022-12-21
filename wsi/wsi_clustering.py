@@ -18,7 +18,7 @@ import pickle
 #     gold_n_senses = pickle.load(fin)
 
 
-def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], 
+def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], inst_id_to_definition:Dict[str, str] , 
                                      max_number_senses: float,min_sense_instances:int,
                                      disable_tfidf: bool, explain_features: bool) -> Tuple[
     Dict[str, Dict[str, int]], List]:
@@ -31,7 +31,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     :return: map from SemEval instance id to soft membership of clusters and their weight
     """
     
-    '''
+    
     def combine(rep_vec, def_vec):                         
       new_embed = []
       for vec in rep_vec:
@@ -40,8 +40,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         new_embed.append(embed)
       return new_embed
       
-      inst_id_to_definition:Dict[str, str] ,
-     ''' 
+     
     
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
@@ -49,7 +48,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
     n_represent = len(representatives) // len(inst_ids_ordered)
     
-    #definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]  
+    definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]  
     
     dict_vectorizer = DictVectorizer(sparse=False)
     rep_mat = dict_vectorizer.fit_transform(representatives)
@@ -59,10 +58,10 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
 
-    #model = SentenceTransformer('all-MiniLM-L6-v2')
-    #definitions_embeddings = model.encode(definitions)
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    definitions_embeddings = model.encode(definitions)
     
-    '''
+    
     combined_embeddings = []
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'>" and definitions' embeddings "<class 'numpy.ndarray'>"
@@ -71,10 +70,10 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
     combined_embeddings_np = np.array(combined_embeddings)
-    '''
+    
     metric = 'cosine'
     method = 'average'
-    dists = pdist(transformed, metric=metric) 
+    dists = pdist(combined_embeddings_np, metric=metric) 
     Z = linkage(dists, method=method, metric=metric)
 
     distance_crit = Z[-max_number_senses, 2]
