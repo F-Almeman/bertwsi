@@ -43,7 +43,7 @@ class WordSenseInductor:
                     inst_id_to_definition = {row['WORD_ID'][i]: row['DEFINITION'][i] for i in range(len(row['WORD_ID']))}
                     break
             
-            
+            '''
             print("**************"+"\n"+lemma_pos+"\n")
             for ids in inst_id_to_sentence:
                 print("\n"+ids)
@@ -52,7 +52,7 @@ class WordSenseInductor:
                 for i in inst_ids_to_representatives[ids]:
                     print(i)
                 
-            
+            '''
           
             
             clusters, statistics = cluster_inst_ids_representatives(
