@@ -41,9 +41,10 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         new_embed.append(embed)
       if pca == False:
         return new_embed
-          
-      
-   
+      if pca == True:
+        pca = PCA(n_components=500)
+        return [pca.fit_transform(emb) for emb in new_embed]
+
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
     logging.info('clustering lemma %s' % lemma)
@@ -68,6 +69,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'>" and definitions' embeddings "<class 'numpy.ndarray'>"
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
+        print(combined_embed.shape)
         combined_embeddings.append(combined_embed)
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
