@@ -47,6 +47,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         for emb in new_embed:
           new_emb = emb[None, :].T
           print(new_emb.shape)
+          pca.fit_transform(new_emb)
         return 0;
           
         #return [pca.fit_transform(emb[None, :].T) for emb in new_embed]
