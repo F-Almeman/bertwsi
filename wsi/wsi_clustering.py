@@ -44,7 +44,12 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         return new_embed
       if pca == True:
         pca = PCA(n_components=500)
-        return [pca.fit_transform(emb[None, :].T) for emb in new_embed]
+        for emb in new_embed:
+          new_emb = emb[None, :].T
+          print(new_emb.shape)
+        return 0;
+          
+        #return [pca.fit_transform(emb[None, :].T) for emb in new_embed]
 
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
