@@ -36,10 +36,15 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     def combine(rep_vec, def_vec, pca=False):                         
       new_embed = []
       for vec in rep_vec:
+        print("vec")
+        print(vec.shape)
+        
+        print("def")
+        print(len(def_vec))
+        print(def_vec.shape)
         vec_1 = vec.A1    # to convert fom matrix to array
         embed = np.concatenate((def_vec, vec_1))
-        print("before")
-        print(embed.shape)
+
         new_embed.append(embed)
       if pca == False:
         return new_embed
