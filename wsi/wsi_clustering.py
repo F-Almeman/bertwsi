@@ -33,23 +33,15 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     """
     
     
-    def combine(rep_vec, def_vec, pca=False):                         
+    def combine(rep_vec, def_vec):                         
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert from matrix to array
         embed = np.concatenate((def_vec, vec_1))
         new_embed.append(embed)
-        
-      if pca == False:
-        return new_embed
-      
-      if pca == True:
-        pca = PCA(n_components=15)
-        new_embed_t = new_embed[None, :].T
-        print(new_embed_t.shape)
-        pca.fit_transform(new_emb)
-        return 0;
-          
+
+      return new_embed
+   
 
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
@@ -74,13 +66,22 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     combined_embeddings = []
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'>" and definitions' embeddings "<class 'numpy.ndarray'>"
-        combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i], True)
-        print("after")
-        print(combined_embed[0].shape)
+        combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
         combined_embeddings.append(combined_embed)
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
     combined_embeddings_np = np.array(combined_embeddings)
+    
+    print("first")
+    print(combined_embeddings_np.shape)
+    pca = True
+    
+    if pca == True:
+      combined_embeddings_np_t = combined_embeddings_np[None, :].T
+      print(new_embed_t.shape)
+      pca = PCA(n_components=15)
+      pca.fit_transform(new_emb)
+
     
     metric = 'cosine'
     method = 'average'
