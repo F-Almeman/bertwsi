@@ -67,6 +67,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'>" and definitions' embeddings "<class 'numpy.ndarray'>"
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
+        print("before")
+        print(len(combined_embed))
         combined_embeddings.append(combined_embed)
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
@@ -77,9 +79,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     pca = True
     
     if pca == True:
-      #combined_embeddings_np_t = combined_embeddings_np[None, :].T
       print(combined_embeddings_np.shape)
-      pca = PCA(n_components=500)
+      n = min(combined_embeddings_np.shape[0], combined_embeddings_np.shape[1])
+      pca = PCA(n_components=n)
       pca.fit_transform(combined_embeddings_np)
 
     
