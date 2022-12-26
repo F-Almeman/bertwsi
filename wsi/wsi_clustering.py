@@ -36,21 +36,20 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     def combine(rep_vec, def_vec, pca=False):                         
       new_embed = []
       for vec in rep_vec:
-        vec_1 = vec.A1    # to convert fom matrix to array
+        vec_1 = vec.A1    # to convert from matrix to array
         embed = np.concatenate((def_vec, vec_1))
-
         new_embed.append(embed)
+        
       if pca == False:
         return new_embed
+      
       if pca == True:
-        pca = PCA(n_components=500)
-        for emb in new_embed:
-          new_emb = emb[None, :].T
-          print(new_emb.shape)
-          pca.fit_transform(new_emb)
+        pca = PCA(n_components=15)
+        new_embed_t = new_embed[None, :].T
+        print(new_embed_t.shape)
+        pca.fit_transform(new_emb)
         return 0;
           
-        #return [pca.fit_transform(emb[None, :].T) for emb in new_embed]
 
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
