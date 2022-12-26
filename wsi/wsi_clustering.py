@@ -77,10 +77,10 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     pca = True
     
     if pca == True:
-      combined_embeddings_np_t = combined_embeddings_np[None, :].T
-      print(combined_embeddings_np_t.shape)
-      pca = PCA(n_components=15)
-      pca.fit_transform(combined_embeddings_np_t)
+      #combined_embeddings_np_t = combined_embeddings_np[None, :].T
+      print(combined_embeddings_np.shape)
+      pca = PCA(n_components=500)
+      pca.fit_transform(combined_embeddings_np)
 
     
     metric = 'cosine'
