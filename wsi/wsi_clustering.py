@@ -82,12 +82,12 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       print(combined_embeddings_np.shape)
       n = min(combined_embeddings_np.shape[0], combined_embeddings_np.shape[1])
       pca = PCA(n_components=n)
-      pca.fit_transform(combined_embeddings_np)
+      transformed_embeddings = pca.fit_transform(combined_embeddings_np)
 
     
     metric = 'cosine'
     method = 'average'
-    dists = pdist(combined_embeddings_np, metric=metric) 
+    dists = pdist(transformed_embeddings, metric=metric) 
     Z = linkage(dists, method=method, metric=metric)
 
     distance_crit = Z[-max_number_senses, 2]
