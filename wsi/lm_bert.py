@@ -46,7 +46,7 @@ class LMBert(SLM):
             self.bert = model
 
             #self.tokenizer = tokenization.BertTokenizer.from_pretrained(bert_model)
-            self.tokenizer = RobertaTokenizer.from_pretrained(bert_model)
+            self.tokenizer = tokenization.RobertaTokenizer.from_pretrained(bert_model)
 
             self.max_sent_len = model.config.max_position_embeddings
             # self.max_sent_len = config.max_position_embeddings
