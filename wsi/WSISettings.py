@@ -13,8 +13,8 @@ DEFAULT_PARAMS = WSISettings(
     debug_dir='debug',
     disable_lemmatization=False,
     disable_tfidf=False,
-    patterns=[('{pre} {target} (or even {mask_predict}) {post}', 0.999),
-              ('{pre} {target_predict} {post}', 0.999)],
+    patterns=[('{pre} {target} (or even {mask_predict}) {post}', 0.4),
+              ('{pre} {target_predict} {post}', 0.4)],
     # (pattern,weight): each of these patterns will produce a prediction state.
     # the weighted sum of them will be matmul'ed for a distribution over substitutes
 
@@ -28,5 +28,5 @@ DEFAULT_PARAMS = WSISettings(
 
     max_batch_size=10,
     prediction_cutoff=200,
-    bert_model='bert-base-uncased'
+    bert_model='roberta-base'
 )
