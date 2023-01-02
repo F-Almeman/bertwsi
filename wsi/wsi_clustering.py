@@ -46,6 +46,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert from matrix to array
+        print(vec_1.shape)
+        print(def_vec.shape)
         z = np.zeros((max(vec_1.shape[0], def_vec.shape[0]), abs(vec_1.shape[0] - def_vec.shape[0])))
         def_vec_z = np.concatenate([def_vec, z], axis=1)
         embed = np.concatenate([vec_1, def_vec_z])
