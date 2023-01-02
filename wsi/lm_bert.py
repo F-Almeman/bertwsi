@@ -1,7 +1,7 @@
 from .slm_interface import SLM
 import multiprocessing
 from pytorch_pretrained_bert import BertForMaskedLM, tokenization
-from transformers import RobertaForMaskedLM, RobertaTokenizer
+#from transformers import RobertaForMaskedLM, RobertaTokenizer
 import torch
 import numpy as np
 from tqdm import tqdm
