@@ -50,10 +50,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         
         print(vec_1.shape)
         print(def_vec_1.shape)
-        z = np.zeros((max(vec_1.shape[0], def_vec_1.shape[0]), abs(vec_1.shape[1] - def_vec_1.shape[1])))
-        print(z.shape)
-        def_vec_z = np.concatenate([def_vec_1, z], axis=1)
-        embed = np.concatenate([vec_1, def_vec_z])
+        embed = np.concatenate([vec_1, def_vec_1])
         new_embed.append(embed)
 
       return new_embed
