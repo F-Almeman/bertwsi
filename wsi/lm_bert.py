@@ -38,14 +38,13 @@ class LMBert(SLM):
         device = torch.device("cuda")
 
         with torch.no_grad():
-            #model = BertForMaskedLM.from_pretrained(bert_model)
-            model = RobertaForMaskedLM.from_pretrained(bert_model)
-            #model.cls.predictions = model.cls.predictions.transform
+            model = BertForMaskedLM.from_pretrained(bert_model)
+            #model = RobertaForMaskedLM.from_pretrained(bert_model)
+            model.cls.predictions = model.cls.predictions.transform
             model.to(device=device)
             model.eval()
             self.bert = model
 
-            #self.tokenizer = tokenization.BertTokenizer.from_pretrained(bert_model)
             self.tokenizer = tokenization.BertTokenizer.from_pretrained(bert_model)
 
             self.max_sent_len = model.config.max_position_embeddings
