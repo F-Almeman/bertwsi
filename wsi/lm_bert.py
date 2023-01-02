@@ -121,16 +121,7 @@ class LMBert(SLM):
         n_patterns = len(patterns)
         pattern_str, pattern_w = list(zip(*patterns))
         pattern_w = torch.from_numpy(np.array(pattern_w, dtype=np.float32).reshape(-1, 1)).to(device=self.device)
-        
-        print("***********patterns*************")
-        print(patterns)
-        print("n_patterns")
-        print(n_patterns)
-        print("pattern_str")
-        print(pattern_str)
-        print("pattern_w")
-        print(pattern_w)
-        
+
         with torch.no_grad():
             sorted_by_len = sorted(inst_id_to_sentence.items(), key=lambda x: len(x[1][0]) + len(x[1][2]))
             res = {}
