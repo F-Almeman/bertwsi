@@ -95,7 +95,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       dists = pdist(transformed_embeddings, metric=metric)
 
     else:
-      dists = pdist(combined_embeddings_np, metric=metric) 
+      dists = pdist(combined_embeddings_np[:, :, 0], metric=metric) 
       
     Z = linkage(dists, method=method, metric=metric)
     distance_crit = Z[-max_number_senses, 2]
