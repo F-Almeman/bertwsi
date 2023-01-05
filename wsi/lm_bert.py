@@ -89,7 +89,7 @@ class LMBert(SLM):
                 definition_pred = self.tokenizer.tokenize(definition_pred.format(**replacements)) + ['[SEP]']
                 target_prediction_idx = len(before_pred)
                 target_tokens = ['[MASK]'] if predicted_token == '{mask_predict}' else self.tokenizer.tokenize(target)
-                print(before_pred + target_tokens + after_pred)
+                print(before_pred + target_tokens + after_pred + "defined as" + definition_pred)
                 return before_pred + target_tokens + after_pred + "defined as" + definition_pred, target_prediction_idx
 
     def _get_lemma(self, word):
@@ -133,7 +133,7 @@ class LMBert(SLM):
                                      self.max_batch_size // n_patterns):
 
                 batch_sents = []
-                for inst_id, (pre, target, post) in batch:
+                for inst_id, (pre, target, post, definition) in batch:
                     for pattern in pattern_str:
                         batch_sents.append(self.format_sentence_to_pattern(pre, target, post, definition, pattern))
 
