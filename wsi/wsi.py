@@ -17,14 +17,16 @@ class WordSenseInductor:
 
     def _perform_wsi_on_ds_gen(self, ds_name, gen, wsisettings: WSISettings, eval_proc, print_progress=False):
         
-         # The generated definitions from dm model (WORD, WORD_ID, EXAMPLE, DEFINITION)
+        # The generated definitions from dm model (WORD, WORD_ID, EXAMPLE, DEFINITION)
         df = pd.read_csv('./resources/bart_wsi_test_evaluation_2010_reranking.csv')
         df = df.groupby(['WORD'], as_index=False)['WORD_ID','DEFINITION'].agg(lambda x: list(list(x)))
         
         ds_by_target = defaultdict(dict)
         for pre, target, post, inst_id in gen:
             lemma_pos = inst_id.rsplit('.', 1)[0]
-            ds_by_target[lemma_pos][inst_id] = (pre, target, post)
+            print(inst_id)
+            print(df.loc[df['WORD_ID'] == inst_id]['DEFINITION'])
+            ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == inst_id]['DEFINITION'])
 
         inst_id_to_sense = {}
         gen = ds_by_target.items()
