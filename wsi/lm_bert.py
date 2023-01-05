@@ -86,6 +86,7 @@ class LMBert(SLM):
                 after_pred = self.tokenizer.tokenize(after_pred.format(**replacements)) + ['[SEP]']
                 target_prediction_idx = len(before_pred)
                 target_tokens = ['[MASK]'] if predicted_token == '{mask_predict}' else self.tokenizer.tokenize(target)
+                print(before_pred + target_tokens + after_pred)
                 return before_pred + target_tokens + after_pred, target_prediction_idx
 
     def _get_lemma(self, word):
