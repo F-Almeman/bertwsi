@@ -19,14 +19,11 @@ class WordSenseInductor:
         
         # The generated definitions from dm model (WORD, WORD_ID, EXAMPLE, DEFINITION)
         df = pd.read_csv('./resources/bart_wsi_test_evaluation_2010_reranking.csv')
-        df = df.groupby(['WORD'], as_index=False)['WORD_ID','DEFINITION'].agg(lambda x: list(list(x)))
         
         ds_by_target = defaultdict(dict)
         for pre, target, post, inst_id in gen:
             lemma_pos = inst_id.rsplit('.', 1)[0]
-            print(inst_id)
-            print(df.loc[df['WORD_ID'] == inst_id]['DEFINITION'].item())
-            ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == inst_id]['DEFINITION'].item())
+            ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == "access.n.1"]['DEFINITION'].values[0])
             #ds_by_target[lemma_pos][inst_id] = (pre, target, post)
 
         inst_id_to_sense = {}
@@ -41,6 +38,7 @@ class WordSenseInductor:
             
             
             #get the definitions for each inst_id for that lemma_pos
+            df = df.groupby(['WORD'], as_index=False)['WORD_ID','DEFINITION'].agg(lambda x: list(list(x)))
             for index, row in df.iterrows():
                 if row['WORD'] == lemma_pos:
                     inst_id_to_definition = {row['WORD_ID'][i]: row['DEFINITION'][i] for i in range(len(row['WORD_ID']))}
