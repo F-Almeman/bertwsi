@@ -23,8 +23,8 @@ class WordSenseInductor:
         ds_by_target = defaultdict(dict)
         for pre, target, post, inst_id in gen:
             lemma_pos = inst_id.rsplit('.', 1)[0]
-            ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == "access.n.1"]['DEFINITION'].values[0])
-            #ds_by_target[lemma_pos][inst_id] = (pre, target, post)
+            #ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == "access.n.1"]['DEFINITION'].values[0])
+            ds_by_target[lemma_pos][inst_id] = (pre, target, post)
 
         inst_id_to_sense = {}
         gen = ds_by_target.items()
