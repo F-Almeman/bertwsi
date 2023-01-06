@@ -76,20 +76,22 @@ class LMBert(SLM):
                 self.original_vocab.append(spacyed[0].lower_)
 
             self.device = device
-
-    def format_sentence_to_pattern(self, pre, target, post, definition, pattern):
-        replacements = dict(pre=pre, target=target, post=post, definition=definition)
+    def format_sentence_to_pattern(self, pre, target, post, pattern):
+    #def format_sentence_to_pattern(self, pre, target, post, definition, pattern):
+        replacements = dict(pre=pre, target=target, post=post)
+        #replacements = dict(pre=pre, target=target, post=post, definition=definition)
         for predicted_token in ['{mask_predict}', '{target_predict}']:
             if predicted_token in pattern: 
                 before_pred, after_pred = pattern.split(predicted_token)
-                after_pred, definition_pred = after_pred.split("defined as")
+                #after_pred, definition_pred = after_pred.split("defined as")
                 before_pred = ['[CLS]'] + self.tokenizer.tokenize(before_pred.format(**replacements))
-                #after_pred = self.tokenizer.tokenize(after_pred.format(**replacements)) + ['[SEP]']
-                after_pred = self.tokenizer.tokenize(after_pred.format(**replacements))
-                definition_pred = self.tokenizer.tokenize(definition_pred.format(**replacements)) + ['[SEP]']
+                after_pred = self.tokenizer.tokenize(after_pred.format(**replacements)) + ['[SEP]']
+                #after_pred = self.tokenizer.tokenize(after_pred.format(**replacements))
+                #definition_pred = self.tokenizer.tokenize(definition_pred.format(**replacements)) + ['[SEP]']
                 target_prediction_idx = len(before_pred)
                 target_tokens = ['[MASK]'] if predicted_token == '{mask_predict}' else self.tokenizer.tokenize(target)
-                return before_pred + target_tokens + after_pred + ['defined', 'as'] + definition_pred, target_prediction_idx
+                return before_pred + target_tokens + after_pred, target_prediction_idx
+                #return before_pred + target_tokens + after_pred + ['defined', 'as'] + definition_pred, target_prediction_idx
 
     def _get_lemma(self, word):
         if word in self._lemmas_cache:
@@ -132,9 +134,9 @@ class LMBert(SLM):
                                      self.max_batch_size // n_patterns):
 
                 batch_sents = []
-                for inst_id, (pre, target, post, definition) in batch:
+                for inst_id, (pre, target, post) in batch:
                     for pattern in pattern_str:
-                        batch_sents.append(self.format_sentence_to_pattern(pre, target, post, definition, pattern))
+                        batch_sents.append(self.format_sentence_to_pattern(pre, target, post, pattern))
 
                 tokenized_sents_vocab_idx = [self.tokenizer.convert_tokens_to_ids(x[0]) for x in batch_sents]
 
@@ -169,7 +171,7 @@ class LMBert(SLM):
                 probs_batch = torch.softmax(topk_vals, -1).detach().cpu().numpy()
                 topk_idxs_batch = topk_idxs.detach().cpu().numpy()
 
-                for (inst_id, (pre, target, post, definition)), probs, topk_idxs in zip(batch, probs_batch, topk_idxs_batch):
+                for (inst_id, (pre, target, post)), probs, topk_idxs in zip(batch, probs_batch, topk_idxs_batch):
                     lemma = target.lower() if wsisettings.disable_lemmatization else self._get_lemma(target.lower())
                     logging.info(
                         f'instance {inst_id} sentence: {pre} --{target}-- {post}')
