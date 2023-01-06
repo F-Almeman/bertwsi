@@ -170,7 +170,7 @@ class LMBert(SLM):
                 probs_batch = torch.softmax(topk_vals, -1).detach().cpu().numpy()
                 topk_idxs_batch = topk_idxs.detach().cpu().numpy()
 
-                for (inst_id, (pre, target, post)), probs, topk_idxs in zip(batch, probs_batch, topk_idxs_batch):
+                for (inst_id, (pre, target, post, definition)), probs, topk_idxs in zip(batch, probs_batch, topk_idxs_batch):
                     lemma = target.lower() if wsisettings.disable_lemmatization else self._get_lemma(target.lower())
                     logging.info(
                         f'instance {inst_id} sentence: {pre} --{target}-- {post}')
