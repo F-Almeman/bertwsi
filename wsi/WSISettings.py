@@ -15,10 +15,10 @@ DEFAULT_PARAMS = WSISettings(
     disable_tfidf=False,
     #patterns=[('{pre} {target} (or even {mask_predict}) {post}', 0.4),
     #          ('{pre} {target_predict} {post}', 0.4)],
-    patterns=[('{pre} {target} {post}. {pre} {target} (or even {mask_predict}) {post}', 0.4),
-             ('{pre} {target} {post}. {pre} {mask_predict} {post}', 0.4)],
-    #patterns=[('{pre} {target} (or even {mask_predict}) {post} (defined as {definition})', 0.4),
-    #         ('{pre} {mask_predict} {post} (defined as {definition})', 0.4)],
+    #patterns=[('{pre} {target} {post}. {pre} {target} (or even {mask_predict}) {post}', 0.4),
+    #         ('{pre} {target} {post}. {pre} {mask_predict} {post}', 0.4)],
+    patterns=[('{pre} {target} (or even {mask_predict}) {post} (defined as {definition})', 0.4),
+             ('{pre} {mask_predict} {post} (defined as {definition})', 0.4)],
     # (pattern,weight): each of these patterns will produce a prediction state.
     # the weighted sum of them will be matmul'ed for a distribution over substitutes
 
