@@ -23,23 +23,23 @@ class WordSenseInductor:
         ds_by_target = defaultdict(dict)
         for pre, target, post, inst_id in gen:
             lemma_pos = inst_id.rsplit('.', 1)[0]
-            #ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == "access.n.1"]['DEFINITION'].values[0])
-            ds_by_target[lemma_pos][inst_id] = (pre, target, post)
+            ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == inst_id]['DEFINITION'].values[0])
+            #ds_by_target[lemma_pos][inst_id] = (pre, target, post)
 
         inst_id_to_sense = {}
         gen = ds_by_target.items()
         if print_progress:
             gen = tqdm(gen, desc=f'predicting substitutes {ds_name}')
         
-        #get the definitions for each inst_id for that lemma_pos
+        # Get the definitions for each inst_id for that lemma_pos
         df = df.groupby(['WORD'], as_index=False)['WORD_ID','DEFINITION'].agg(lambda x: list(list(x)))
+        
+        # Start the work for each lemma_pos
         for lemma_pos, inst_id_to_sentence in gen:
             inst_ids_to_representatives = \
                 self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
-            
-            
-            
+     
             for index, row in df.iterrows():
                 if row['WORD'] == lemma_pos:
                     inst_id_to_definition = {row['WORD_ID'][i]: row['DEFINITION'][i] for i in range(len(row['WORD_ID']))}
