@@ -10,7 +10,7 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
 from sklearn.preprocessing import StandardScaler
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.decomposition import FastICA 
 
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
@@ -83,19 +83,18 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     if pca == True:
       print(combined_embeddings_np.shape)
       n = min(combined_embeddings_np.shape[0], combined_embeddings_np.shape[1])
-      print(n)
-      #pca = PCA(n_components=n)
+      pca = PCA(n_components=n)
       combined_embeddings_np = StandardScaler().fit_transform(combined_embeddings_np)
-      #transformed_embeddings = pca.fit_transform(combined_embeddings_np)
-      lda = LinearDiscriminantAnalysis(n_components=n)
-      transformed_embeddings = lda.fit_transform(combined_embeddings_np)
+      transformed_embeddings = pca.fit_transform(combined_embeddings_np)
+      #ICA = FastICA(n_components=n) 
+      #transformed_embeddings=ICA.fit_transform(combined_embeddings_np)
       dists = pdist(transformed_embeddings, metric=metric)
 
     else:
       dists = pdist(combined_embeddings_np[:, :, 0], metric=metric) 
      
     
-    dists = pdist(transformed, metric=metric)
+    #dists = pdist(transformed, metric=metric)
     Z = linkage(dists, method=method, metric=metric)
     distance_crit = Z[-max_number_senses, 2]
     labels = fcluster(Z, distance_crit,
