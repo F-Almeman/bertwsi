@@ -10,6 +10,7 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
 from sklearn.preprocessing import StandardScaler
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
@@ -83,9 +84,11 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       print(combined_embeddings_np.shape)
       n = min(combined_embeddings_np.shape[0], combined_embeddings_np.shape[1])
       print(n)
-      pca = PCA(n_components=n)
+      #pca = PCA(n_components=n)
       combined_embeddings_np = StandardScaler().fit_transform(combined_embeddings_np)
-      transformed_embeddings = pca.fit_transform(combined_embeddings_np)
+      #transformed_embeddings = pca.fit_transform(combined_embeddings_np)
+      lda = LinearDiscriminantAnalysis(n_components=n)
+      transformed_embeddings = lda.fit_transform(combined_embeddings_np)
       dists = pdist(transformed_embeddings, metric=metric)
 
     else:
