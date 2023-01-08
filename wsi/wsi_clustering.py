@@ -9,6 +9,7 @@ from scipy.spatial.distance import pdist, cdist
 from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
+from sklearn.preprocessing import StandardScaler
 
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
@@ -19,12 +20,12 @@ import pickle
 #     gold_n_senses = pickle.load(fin)
 
 
-#def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], inst_id_to_definition:Dict[str, str], 
+def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], inst_id_to_definition:Dict[str, str], 
 #                                     max_number_senses: float,min_sense_instances:int,
 #                                     disable_tfidf: bool, explain_features: bool) -> Tuple[
 #    Dict[str, Dict[str, int]], List]:
 
-def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], 
+#def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], 
                                      max_number_senses: float,min_sense_instances:int,
                                      disable_tfidf: bool, explain_features: bool) -> Tuple[
     Dict[str, Dict[str, int]], List]:
@@ -46,16 +47,6 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         new_embed.append(embed)
 
       return new_embed
-    
-    def combine_2(rep_vec, def_vec):                         
-      new_embed = []
-      for vec in rep_vec:
-        vec_1 = vec.A1.reshape(-1,1)    # to convert from matrix to 2D array
-        def_vec_1 = def_vec.reshape(-1,1)  # to convert from 1D to 2D array
-        embed = np.concatenate([vec_1, def_vec_1])
-        new_embed.append(embed)
-
-      return new_embed
 
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
@@ -69,7 +60,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         transformed = rep_mat
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
-    '''
+    
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]  
     definitions_embeddings = model.encode(definitions)
@@ -78,26 +69,28 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     combined_embeddings = []
     for i, inst_id in enumerate(inst_ids_ordered):
         # combine representatives' vectors "<class 'numpy.matrix'>" and definitions' embeddings "<class 'numpy.ndarray'>"
-        combined_embed = combine_2(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
+        combined_embed = combine_1(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
         combined_embeddings.append(combined_embed)
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
     combined_embeddings_np = np.array(combined_embeddings)
-    '''
-    pca = False
+    
+    pca = True
     metric = 'cosine'
     method = 'average'
-    '''
+    
     if pca == True:
       print(combined_embeddings_np.shape)
       n = min(combined_embeddings_np.shape[0], combined_embeddings_np.shape[1])
+      print(n)
       pca = PCA(n_components=n)
+      combined_embeddings_np = StandardScaler().fit_transform(combined_embeddings_np)
       transformed_embeddings = pca.fit_transform(combined_embeddings_np)
       dists = pdist(transformed_embeddings, metric=metric)
 
     else:
       dists = pdist(combined_embeddings_np[:, :, 0], metric=metric) 
-     '''
+     
     
     dists = pdist(transformed, metric=metric)
     Z = linkage(dists, method=method, metric=metric)
