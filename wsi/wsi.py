@@ -23,8 +23,8 @@ class WordSenseInductor:
         ds_by_target = defaultdict(dict)
         for pre, target, post, inst_id in gen:
             lemma_pos = inst_id.rsplit('.', 1)[0]
-            ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == inst_id]['DEFINITION'].values[0])
-            #ds_by_target[lemma_pos][inst_id] = (pre, target, post)
+            #ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == inst_id]['DEFINITION'].values[0])
+            ds_by_target[lemma_pos][inst_id] = (pre, target, post)
 
         inst_id_to_sense = {}
         gen = ds_by_target.items()
@@ -53,18 +53,18 @@ class WordSenseInductor:
                 print(inst_id_to_definition[ids])
                 for i in inst_ids_to_representatives[ids]:
                     print(i)
-            '''
+            
             clusters, statistics = cluster_inst_ids_representatives(
                 inst_ids_to_representatives=inst_ids_to_representatives, inst_id_to_definition=inst_id_to_definition,
                 max_number_senses=wsisettings.max_number_senses,min_sense_instances=wsisettings.min_sense_instances,
                 disable_tfidf=wsisettings.disable_tfidf,explain_features=True)
-            '''
             
+            '''
             clusters, statistics = cluster_inst_ids_representatives(
                 inst_ids_to_representatives=inst_ids_to_representatives,
                 max_number_senses=wsisettings.max_number_senses,min_sense_instances=wsisettings.min_sense_instances,
                 disable_tfidf=wsisettings.disable_tfidf,explain_features=True)
-            
+            '''
             
             inst_id_to_sense.update(clusters)
             if statistics:
