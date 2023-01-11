@@ -81,7 +81,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     if pca == True:
       n = min(combined_embeddings_np.shape[0], combined_embeddings_np.shape[1])
       pca = PCA(n_components=n)
-      transformed_embeddings = pca.fit_transform(normalize(combined_embeddings_np))
+      transformed_embeddings = pca.fit_transform(combined_embeddings_np)
       dists = pdist(transformed_embeddings, metric=metric)
 
     else:
