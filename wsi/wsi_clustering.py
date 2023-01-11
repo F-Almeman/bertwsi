@@ -9,8 +9,6 @@ from scipy.spatial.distance import pdist, cdist
 from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import FastICA 
 
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
@@ -22,14 +20,14 @@ import pickle
 
 
 def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], inst_id_to_definition:Dict[str, str], 
-#                                     max_number_senses: float,min_sense_instances:int,
-#                                     disable_tfidf: bool, explain_features: bool) -> Tuple[
-#    Dict[str, Dict[str, int]], List]:
-
-#def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], 
                                      max_number_senses: float,min_sense_instances:int,
                                      disable_tfidf: bool, explain_features: bool) -> Tuple[
     Dict[str, Dict[str, int]], List]:
+
+#def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], 
+#                                    max_number_senses: float,min_sense_instances:int,
+#                                     disable_tfidf: bool, explain_features: bool) -> Tuple[
+#    Dict[str, Dict[str, int]], List]:
     global gold_n_senses
     """
     preforms agglomerative clustering on representatives of one SemEval target
@@ -81,13 +79,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     method = 'average'
     
     if pca == True:
-      print(combined_embeddings_np.shape)
       n = min(combined_embeddings_np.shape[0], combined_embeddings_np.shape[1])
-      #pca = PCA(n_components=n)
-      combined_embeddings_np = StandardScaler().fit_transform(combined_embeddings_np)
-      #transformed_embeddings = pca.fit_transform(combined_embeddings_np)
-      ICA = FastICA(n_components=n) 
-      transformed_embeddings = ICA.fit_transform(combined_embeddings_np)
+      pca = PCA(n_components=n)
+      transformed_embeddings = pca.fit_transform(normalize(combined_embeddings_np))
       dists = pdist(transformed_embeddings, metric=metric)
 
     else:
