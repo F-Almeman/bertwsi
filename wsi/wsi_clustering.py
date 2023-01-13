@@ -23,11 +23,6 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
                                      max_number_senses: float,min_sense_instances:int,
                                      disable_tfidf: bool, explain_features: bool) -> Tuple[
     Dict[str, Dict[str, int]], List]:
-
-#def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], 
-#                                    max_number_senses: float,min_sense_instances:int,
-#                                     disable_tfidf: bool, explain_features: bool) -> Tuple[
-#    Dict[str, Dict[str, int]], List]:
     global gold_n_senses
     """
     preforms agglomerative clustering on representatives of one SemEval target
