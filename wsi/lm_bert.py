@@ -39,7 +39,6 @@ class LMBert(SLM):
 
         with torch.no_grad():
             model = BertForMaskedLM.from_pretrained(bert_model)
-            #model = RobertaForMaskedLM.from_pretrained(bert_model)
             model.cls.predictions = model.cls.predictions.transform
             model.to(device=device)
             model.eval()
@@ -126,10 +125,25 @@ class LMBert(SLM):
         n_patterns = len(patterns)
         pattern_str, pattern_w = list(zip(*patterns))
         pattern_w = torch.from_numpy(np.array(pattern_w, dtype=np.float32).reshape(-1, 1)).to(device=self.device)
+        
+        print("pattern_str: ")
+        print(pattern_str)
+        print("pattern_w: ")
+        print(pattern_w)
 
         with torch.no_grad():
+            
+            print("1st and 2nd elements in inst_id_to_sentence before sorting by lenght")
+            print(list(inst_id_to_sentence.items())[0])
+            print(list(inst_id_to_sentence.items())[1])
             sorted_by_len = sorted(inst_id_to_sentence.items(), key=lambda x: len(x[1][0]) + len(x[1][2]))
+            
+            print("1st and 2nd elements in inst_id_to_sentence after sorting by lenght")
+            print(sorted_by_len[0])
+            print(sorted_by_len[1])
+            
             res = {}
+            print("batches " + get_batches(sorted_by_len,self.max_batch_size // n_patterns))
             for batch in get_batches(sorted_by_len,
                                      self.max_batch_size // n_patterns):
 
@@ -138,30 +152,58 @@ class LMBert(SLM):
                     for pattern in pattern_str:
                         batch_sents.append(self.format_sentence_to_pattern(pre, target, post, pattern))
 
+                print("Size of batch_sents (It has the sentences formatted based on pattern): "+len(batch_sents))
+                print("The first element in this list: "+ batch_sents[0])
+                print("The second element in this list: "+ batch_sents[1])
+                
                 tokenized_sents_vocab_idx = [self.tokenizer.convert_tokens_to_ids(x[0]) for x in batch_sents]
+                
+                print("Size of tokenized_sents_vocab_idx : "+len(tokenized_sents_vocab_idx))
+                print("The first element in this list: "+ tokenized_sents_vocab_idx[0])
 
                 max_len = max(len(x) for x in tokenized_sents_vocab_idx)
                 batch_input = np.zeros((len(tokenized_sents_vocab_idx), max_len), dtype=np.long)
                 for idx, vals in enumerate(tokenized_sents_vocab_idx):
                     batch_input[idx, 0:len(vals)] = vals
-
+                    
+                print("Size of batch_input : "+len(batch_input))
+                print("The first element in this list: "+ batch_input[0])
+                
                 torch_input_ids = torch.tensor(batch_input, dtype=torch.long).to(device=self.device)
-
+                print("Size of torch_input_ids : "+torch_input_ids.shape)
+                print("The first element in this list: "+ torch_input_ids[0])
+                
                 torch_mask = torch_input_ids != 0
+                print("torch_mask"+ torch_mask.shape)
+                print("torch_mask"+ torch_mask[0])
+                
 
                 logits_all_tokens = self.bert(torch_input_ids, attention_mask=torch_mask)
+                print("Size of logits_all_tokens : "+logits_all_tokens.shape)
+                print("The first element in this list: "+ logits_all_tokens[0])
 
                 logits_target_tokens = torch.zeros((len(batch_sents), logits_all_tokens.shape[2])).to(self.device)
                 for i in range(0, len(batch_sents)):
                     logits_target_tokens[i, :] = logits_all_tokens[i, batch_sents[i][1], :]
-
+                
+                print("Size of logits_target_tokens : "+logits_target_tokens.shape)
+                print("The first element in this list: "+ logits_target_tokens[0])
+                
                 logits_target_tokens_joint_patt = torch.zeros(
                     (len(batch_sents) // n_patterns, logits_target_tokens.shape[1])).to(
                     self.device)
+                
                 for i in range(0, len(batch_sents), n_patterns):
+                    if i == 0:
+                        print("To see what does sum(0) do?")
+                        print("without sum(0) " + (logits_target_tokens[i:i + n_patterns, :] * pattern_w))
+                        print("with sum(0) "+(logits_target_tokens[i:i + n_patterns, :] * pattern_w).sum(0))
                     logits_target_tokens_joint_patt[i // n_patterns, :] = (
                             logits_target_tokens[i:i + n_patterns, :] * pattern_w).sum(0)
 
+                print("Size of logits_target_tokens_joint_patt : "+logits_target_tokens_joint_patt.shape)
+                print("The first element in this list: "+ logits_target_tokens_joint_patt[0])
+                
                 pre_softmax = torch.matmul(
                     logits_target_tokens_joint_patt,
                     self.bert.bert.embeddings.word_embeddings.weight.transpose(0, 1))
@@ -169,7 +211,12 @@ class LMBert(SLM):
                 topk_vals, topk_idxs = torch.topk(pre_softmax, wsisettings.prediction_cutoff, -1)
 
                 probs_batch = torch.softmax(topk_vals, -1).detach().cpu().numpy()
+                print("Size of probs_batch : "+probs_batch.shape)
+                print("The first element in this list: "+ probs_batch[0])
+                
                 topk_idxs_batch = topk_idxs.detach().cpu().numpy()
+                print("Size of topk_idxs_batch : "+topk_idxs_batch.shape)
+                print("The first element in this list: "+ topk_idxs_batch[0])
 
                 for (inst_id, (pre, target, post)), probs, topk_idxs in zip(batch, probs_batch, topk_idxs_batch):
                     lemma = target.lower() if wsisettings.disable_lemmatization else self._get_lemma(target.lower())
@@ -177,9 +224,15 @@ class LMBert(SLM):
                         f'instance {inst_id} sentence: {pre} --{target}-- {post}')
                     probs = probs.copy()
                     target_vocab = self.original_vocab if wsisettings.disable_lemmatization else self.lemmatized_vocab
+                    print("Size of target_vocab : "+ len(target_vocab))
+                    print("The first element in this list: "+ target_vocab[0])
+                    print("The second element in this list: "+ target_vocab[1])
 
+                    
+                    print("Ignored probs")
                     for i in range(wsisettings.prediction_cutoff):
                             if target_vocab[topk_idxs[i]] == lemma:
+                                print(target_vocab[topk_idxs[i]])
                                 probs[i] = 0
                     probs /= np.sum(probs)
 
