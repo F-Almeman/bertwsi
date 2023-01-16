@@ -19,7 +19,7 @@ import pickle
 #     gold_n_senses = pickle.load(fin)
 
 
-def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]], inst_id_to_definition:Dict[str, str], 
+def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List[Dict[str, int]]],
                                      max_number_senses: float,min_sense_instances:int,
                                      disable_tfidf: bool, explain_features: bool) -> Tuple[
     Dict[str, Dict[str, int]], List]:
@@ -55,6 +55,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
     
+    '''
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]  
     definitions_embeddings = model.encode(definitions)
@@ -81,9 +82,10 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
 
     else:
       dists = pdist(combined_embeddings_np[:, :, 0], metric=metric) 
-     
-    
-    #dists = pdist(transformed, metric=metric)
+     '''
+    metric = 'cosine'
+    method = 'average'    
+    dists = pdist(transformed, metric=metric)
     Z = linkage(dists, method=method, metric=metric)
     distance_crit = Z[-max_number_senses, 2]
     labels = fcluster(Z, distance_crit,
