@@ -202,8 +202,10 @@ class LMBert(SLM):
                 for i in range(0, len(batch_sents), n_patterns):
                     if i == 0:
                         print("\n\nTo see what does sum(0) do?")
-                        print("without sum(0) " + (logits_target_tokens[i:i + n_patterns, :] * pattern_w))
-                        print("with sum(0) "+(logits_target_tokens[i:i + n_patterns, :] * pattern_w).sum(0))
+                        print("without sum(0) " )
+                        print(logits_target_tokens[i:i + n_patterns, :] * pattern_w)
+                        print("with sum(0) ")
+                        print((logits_target_tokens[i:i + n_patterns, :] * pattern_w).sum(0))
                     logits_target_tokens_joint_patt[i // n_patterns, :] = (
                             logits_target_tokens[i:i + n_patterns, :] * pattern_w).sum(0)
 
