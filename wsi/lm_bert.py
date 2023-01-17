@@ -225,7 +225,7 @@ class LMBert(SLM):
                 print(probs_batch[0])
                 
                 topk_idxs_batch = topk_idxs.detach().cpu().numpy()
-                print("\n\nSize of topk_idxs_batch : "+topk_idxs_batch.shape)
+                print("\n\nSize of topk_idxs_batch : "+ str(topk_idxs_batch.shape))
                 print("The first element in this list: ")
                 print(topk_idxs_batch[0])
 
