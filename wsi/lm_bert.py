@@ -6,6 +6,7 @@ import torch
 import numpy as np
 from tqdm import tqdm
 import logging
+import sys
 from .WSISettings import WSISettings
 
 from typing import Dict, List, Tuple
@@ -240,7 +241,8 @@ class LMBert(SLM):
                         np.random.choice(topk_idxs, wsisettings.n_represents * wsisettings.n_samples_per_rep,
                                          p=probs))
                     logging.info('some samples: %s' % [target_vocab[x] for x in new_samples[:5]])
-
+                    
+                    sys.exit()
                     new_reps = []
                     for i in range(wsisettings.n_represents):
                         new_rep = {}
