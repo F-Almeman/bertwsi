@@ -91,7 +91,7 @@ class LMBert(SLM):
                 target_prediction_idx = len(before_pred)
                 target_tokens = ['[MASK]'] if predicted_token == '{mask_predict}' else self.tokenizer.tokenize(target)
                 print("Formatted sentence: ")
-                print(before_pred + target_tokens + after_pred + str(target_prediction_idx)))
+                print(before_pred + target_tokens + after_pred + str(target_prediction_idx))
                 return before_pred + target_tokens + after_pred, target_prediction_idx
                 #return before_pred + target_tokens + after_pred + ['defined', 'as'] + definition_pred, target_prediction_idx
 
