@@ -77,24 +77,19 @@ class LMBert(SLM):
 
             self.device = device
     def format_sentence_to_pattern(self, pre, target, post, pattern):
-    #def format_sentence_to_pattern(self, pre, target, post, definition, pattern):
         replacements = dict(pre=pre, target=target, post=post)
-        #replacements = dict(pre=pre, target=target, post=post, definition=definition)
         for predicted_token in ['{mask_predict}', '{target_predict}']:
             if predicted_token in pattern: 
                 before_pred, after_pred = pattern.split(predicted_token)
-                #after_pred, definition_pred = after_pred.split("defined as")
                 before_pred = ['[CLS]'] + self.tokenizer.tokenize(before_pred.format(**replacements))
                 after_pred = self.tokenizer.tokenize(after_pred.format(**replacements)) + ['[SEP]']
-                #after_pred = self.tokenizer.tokenize(after_pred.format(**replacements))
-                #definition_pred = self.tokenizer.tokenize(definition_pred.format(**replacements)) + ['[SEP]']
                 target_prediction_idx = len(before_pred)
                 target_tokens = ['[MASK]'] if predicted_token == '{mask_predict}' else self.tokenizer.tokenize(target)
                 print("Formatted sentence: ")
-                print(before_pred + target_tokens + after_pred + str(target_prediction_idx))
+                print(before_pred + target_tokens + after_pred)
+                print(target_prediction_idx) 
                 return before_pred + target_tokens + after_pred, target_prediction_idx
-                #return before_pred + target_tokens + after_pred + ['defined', 'as'] + definition_pred, target_prediction_idx
-
+               
     def _get_lemma(self, word):
         if word in self._lemmas_cache:
             return self._lemmas_cache[word]
