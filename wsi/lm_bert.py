@@ -90,6 +90,8 @@ class LMBert(SLM):
                 #definition_pred = self.tokenizer.tokenize(definition_pred.format(**replacements)) + ['[SEP]']
                 target_prediction_idx = len(before_pred)
                 target_tokens = ['[MASK]'] if predicted_token == '{mask_predict}' else self.tokenizer.tokenize(target)
+                print("Formatted sentence: ")
+                print(before_pred + target_tokens + after_pred + target_prediction_idx)
                 return before_pred + target_tokens + after_pred, target_prediction_idx
                 #return before_pred + target_tokens + after_pred + ['defined', 'as'] + definition_pred, target_prediction_idx
 
@@ -144,7 +146,7 @@ class LMBert(SLM):
             print(sorted_by_len[1])
             
             res = {}
-            print("batches " + get_batches(sorted_by_len,self.max_batch_size // n_patterns))
+            print("batches " + str(get_batches(sorted_by_len,self.max_batch_size // n_patterns)))
             for batch in get_batches(sorted_by_len,
                                      self.max_batch_size // n_patterns):
 
