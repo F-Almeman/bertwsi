@@ -237,18 +237,11 @@ class LMBert(SLM):
                     target_vocab = self.original_vocab if wsisettings.disable_lemmatization else self.lemmatized_vocab
                     print("\n\nType of target_vocab : "+ str(type(target_vocab)))
                     print(target_vocab)
-                    print("The first element in this list: ")
-                    print(target_vocab[0])
-                    print("The second element in this list: ")
-                    print(target_vocab[1])
 
-                    
                     print("\n\nIgnored probs")
                     for i in range(wsisettings.prediction_cutoff):
-                        if i in [1, 2, 3]:
-                            print(target_vocab[topk_idxs[i]])
                             if target_vocab[topk_idxs[i]] == lemma:
-                                print(target_vocab[topk_idxs[i]])
+                                print(str(i) + target_vocab[topk_idxs[i]])
                                 probs[i] = 0
                     probs /= np.sum(probs)
 
