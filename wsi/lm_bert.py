@@ -250,7 +250,7 @@ class LMBert(SLM):
                         np.random.choice(topk_idxs, wsisettings.n_represents * wsisettings.n_samples_per_rep,
                                          p=probs))
                     logging.info('some samples: %s' % [target_vocab[x] for x in new_samples[:5]])
-                    print("\n\nSize of new_samples : "+ str(len(new_samples))
+                    print("\n\nSize of new_samples : "+ str(len(new_samples)))
                     print("The first element in this list: ")
                     print(new_samples[0])
 
