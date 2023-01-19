@@ -259,9 +259,12 @@ class LMBert(SLM):
                         new_rep = {}
                         for j in range(wsisettings.n_samples_per_rep):
                             new_sample = target_vocab[new_samples.pop()]
-                            print("\n\n new_sample")
-                            print(new_sample)
+                            if i == 0:
+                                print("\n\n new_sample")
+                                print(new_sample)
                             new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
+                        if i == 0:
+                            print(new_rep)
                         new_reps.append(new_rep)
                     res[inst_id] = new_reps
                     sys.exit()
