@@ -163,11 +163,12 @@ class LMBert(SLM):
                 print(tokenized_sents_vocab_idx[0])
 
                 max_len = max(len(x) for x in tokenized_sents_vocab_idx)
+                print("\n\nmax_len: "+str(max_len))
                 batch_input = np.zeros((len(tokenized_sents_vocab_idx), max_len), dtype=np.long)
                 for idx, vals in enumerate(tokenized_sents_vocab_idx):
                     batch_input[idx, 0:len(vals)] = vals
                     
-                print("\n\nSize of batch_input : "+str(len(batch_input)))
+                print("Size of batch_input : "+str(batch_input.shape))
                 print("The first element in this list: ")
                 print(batch_input[0])
                 
@@ -238,7 +239,7 @@ class LMBert(SLM):
                     print("\n\nType of target_vocab : "+ str(type(target_vocab)))
                     print(target_vocab)
 
-                    print("\n\nIgnored probs")
+                    print("\n\nProbs")
                     for i in range(wsisettings.prediction_cutoff):
                             if target_vocab[topk_idxs[i]] == lemma:
                                 print(str(i) + target_vocab[topk_idxs[i]])
@@ -249,15 +250,20 @@ class LMBert(SLM):
                         np.random.choice(topk_idxs, wsisettings.n_represents * wsisettings.n_samples_per_rep,
                                          p=probs))
                     logging.info('some samples: %s' % [target_vocab[x] for x in new_samples[:5]])
-                    
-                    sys.exit()
+                     print("\n\nSize of new_samples : "+ str(len(new_samples))
+                     print("The first element in this list: ")
+                     print(new_samples[0])
+
                     new_reps = []
                     for i in range(wsisettings.n_represents):
                         new_rep = {}
                         for j in range(wsisettings.n_samples_per_rep):
                             new_sample = target_vocab[new_samples.pop()]
+                            print("\n\n new_sample")
+                            print(new_sample)
                             new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
                         new_reps.append(new_rep)
                     res[inst_id] = new_reps
+                    sys.exit()
 
             return res
