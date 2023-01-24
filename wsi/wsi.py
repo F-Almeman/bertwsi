@@ -37,7 +37,7 @@ class WordSenseInductor:
         # Start the work for each lemma_pos
         for lemma_pos, inst_id_to_sentence in gen:
             inst_ids_to_representatives = \
-                self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
+                self.bilm.predict_sent_substitute_representatives_v2(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
      
             for index, row in df.iterrows():
