@@ -1,9 +1,9 @@
-from .slm_interface import SLM
-import multiprocessing
-from pytorch_pretrained_bert import BertForMaskedLM, tokenization
-import torch
-import numpy as np
-from tqdm import tqdm
+#from .slm_interface import SLM
+#import multiprocessing
+#from pytorch_pretrained_bert import BertForMaskedLM, tokenization
+#import torch
+#import numpy as np
+#from tqdm import tqdm
 import logging
 import sys
 from .WSISettings import WSISettings
