@@ -130,7 +130,7 @@ class LMBert(SLM):
                 #print("\n\nfirst represent: ")
                 #print(reps[0])
                 lemma = target.lower() if wsisettings.disable_lemmatization else self._get_lemma(target.lower())
-                reps_list = [i['token_str'] if i['token_str'] != lemma for i in reps]
+                reps_list = [i['token_str'] for i in reps if i['token_str'] != lemma]
                 
                 new_reps = []
                 print(len(reps_list))
