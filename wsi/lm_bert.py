@@ -109,26 +109,26 @@ class LMBert(SLM):
 
         with torch.no_grad():
             
-            
+            '''
             print("\n\n1st and 2nd elements in inst_id_to_sentence before sorting by length")
             print(list(inst_id_to_sentence.items())[0])
             print(list(inst_id_to_sentence.items())[1])
-            
+            '''
             sorted_by_len = sorted(inst_id_to_sentence.items(), key=lambda x: len(x[1][0]) + len(x[1][2]))
-            
+            '''
             print("\n\n1st and 2nd elements in inst_id_to_sentence after sorting by length")
             print(sorted_by_len[0])
             print(sorted_by_len[1])
-            
+            '''
             unmasker = pipeline('fill-mask', model='bert-large-cased-whole-word-masking')
             res = {}
             for inst_id, (pre, target, post) in sorted_by_len:
                 formatted_sent = pre + target + " (or even [MASK]) " + post
-                print("\n\n*****Formatted sentence: ****")
-                print(formatted_sent)
+                #print("\n\n*****Formatted sentence: ****")
+                #print(formatted_sent)
                 reps = unmasker(formatted_sent, top_k= wsisettings.n_represents * wsisettings.n_samples_per_rep)
-                print("\n\nfirst represent: ")
-                print(reps[0])
+                #print("\n\nfirst represent: ")
+                #print(reps[0])
                 reps_list = [i['token_str'] for i in reps]
                 
                 new_reps = []
@@ -139,8 +139,7 @@ class LMBert(SLM):
                         new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
                         new_reps.append(new_rep)
                     res[inst_id] = new_reps
-                    print(res[inst_id])
-                    sys.exit()
+                    #print(res[inst_id])
 
             return res
     
