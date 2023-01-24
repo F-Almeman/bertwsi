@@ -1,4 +1,4 @@
-#from .slm_interface import SLM
+from .slm_interface import SLM
 #import multiprocessing
 #from pytorch_pretrained_bert import BertForMaskedLM, tokenization
 #import torch
