@@ -1,9 +1,9 @@
-#from .slm_interface import SLM
-#import multiprocessing
-#from pytorch_pretrained_bert import BertForMaskedLM, tokenization
-#import torch
-#import numpy as np
-#from tqdm import tqdm
+from .slm_interface import SLM
+import multiprocessing
+from pytorch_pretrained_bert import BertForMaskedLM, tokenization
+import torch
+import numpy as np
+from tqdm import tqdm
 import logging
 import sys
 from .WSISettings import WSISettings
@@ -70,7 +70,7 @@ def predict_sent_substitute_representatives_v2(self, inst_id_to_sentence: Dict[s
                     sys.exit()
 
             return res
-'''
+
 class LMBert(SLM):
 
     def __init__(self, cuda_device, bert_model, max_batch_size=20):
@@ -342,4 +342,4 @@ class LMBert(SLM):
                     #sys.exit()
 
             return res
-'''
+
