@@ -33,7 +33,7 @@ if __name__ == '__main__':
         startmsg += (' %-30s:%s\n' % (arg.replace('_', '-'), val))
     startmsg = startmsg.strip()
 
-    lm = LMBert(settings.cuda_device, settings.bert_model,
+    #lm = LMBert(settings.cuda_device, settings.bert_model,
                 max_batch_size=settings.max_batch_size)
 
     if settings.debug_dir:
