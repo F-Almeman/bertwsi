@@ -97,7 +97,7 @@ class LMBert(SLM):
             self._lemmas_cache[word] = lemma
             return lemma
 
-    def predict_sent_substitute_representatives_v2(self, masker, inst_id_to_sentence: Dict[str, Tuple[List[str], int]],
+    def predict_sent_substitute_representatives_v2(self, unmasker, inst_id_to_sentence: Dict[str, Tuple[List[str], int]],
                                                 wsisettings: WSISettings) \
             -> Dict[str, List[Dict[str, int]]]:
         """
