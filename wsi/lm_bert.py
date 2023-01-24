@@ -97,7 +97,7 @@ class LMBert(SLM):
             self._lemmas_cache[word] = lemma
             return lemma
 
-    def predict_sent_substitute_representatives_v2(self, inst_id_to_sentence: Dict[str, Tuple[List[str], int]],
+    def predict_sent_substitute_representatives_v2(self, masker, inst_id_to_sentence: Dict[str, Tuple[List[str], int]],
                                                 wsisettings: WSISettings) \
             -> Dict[str, List[Dict[str, int]]]:
         """
@@ -120,7 +120,7 @@ class LMBert(SLM):
             print(sorted_by_len[0])
             print(sorted_by_len[1])
             '''
-            unmasker = pipeline('fill-mask', model='bert-large-cased-whole-word-masking')
+            
             res = {}
             for inst_id, (pre, target, post) in sorted_by_len:
                 formatted_sent = pre + target + " (or even [MASK]) " + post
