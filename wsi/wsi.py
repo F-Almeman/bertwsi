@@ -35,9 +35,10 @@ class WordSenseInductor:
         df = df.groupby(['WORD'], as_index=False)['WORD_ID','DEFINITION'].agg(lambda x: list(list(x)))
         
         # Start the work for each lemma_pos
+        unmasker = pipeline('fill-mask', model='bert-large-cased-whole-word-masking')
         for lemma_pos, inst_id_to_sentence in gen:
             inst_ids_to_representatives = \
-                self.bilm.predict_sent_substitute_representatives_v2(inst_id_to_sentence=inst_id_to_sentence,
+                self.bilm.predict_sent_substitute_representatives_v2(unmasker, inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
      
             for index, row in df.iterrows():
