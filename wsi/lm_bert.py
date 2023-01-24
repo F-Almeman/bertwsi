@@ -140,11 +140,9 @@ class LMBert(SLM):
                         new_sample = reps_list.pop()
                         print(new_sample)
                         new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
-                        new_reps.append(new_rep)
+                    new_reps.append(new_rep)
                     print(new_reps)
-                    res[inst_id] = new_reps
-                    #print(res[inst_id])
-            print(res)
+                res[inst_id] = new_reps
             return res
     
     def predict_sent_substitute_representatives(self, inst_id_to_sentence: Dict[str, Tuple[List[str], int]],
