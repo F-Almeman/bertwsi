@@ -25,52 +25,6 @@ def get_batches(from_iter, group_size):
     if ret:
         yield ret
 
-def predict_sent_substitute_representatives_v2(self, inst_id_to_sentence: Dict[str, Tuple[List[str], int]],
-                                                wsisettings: WSISettings) \
-            -> Dict[str, List[Dict[str, int]]]:
-        """
-
-        :param wsisettings: all algorithm settings
-        :param inst_id_to_sentence: dictionary instance_id -> (sentence tokens list, target word index in tokens)
-
-        """
-
-        with torch.no_grad():
-            
-            
-            print("\n\n1st and 2nd elements in inst_id_to_sentence before sorting by length")
-            print(list(inst_id_to_sentence.items())[0])
-            print(list(inst_id_to_sentence.items())[1])
-            
-            sorted_by_len = sorted(inst_id_to_sentence.items(), key=lambda x: len(x[1][0]) + len(x[1][2]))
-            
-            print("\n\n1st and 2nd elements in inst_id_to_sentence after sorting by length")
-            print(sorted_by_len[0])
-            print(sorted_by_len[1])
-            
-            unmasker = pipeline('fill-mask', model='bert-large-cased-whole-word-masking')
-            res = {}
-            for inst_id, (pre, target, post) in sorted_by_len:
-                formatted_sent = pre + target + "(or even [MASK])" + post
-                print("\n\n*****Formatted sentence: ****")
-                print(formatted_sent)
-                reps = unmasker(formatted_sent, top_k= wsisettings.n_represents * wsisettings.n_samples_per_rep)
-                print("\n\nfirst represent: ")
-                print(reps[0])
-                reps_list = [i['token_str'] for i in reps]
-                
-                new_reps = []
-                for i in range(wsisettings.n_represents):
-                    new_rep = {}
-                    for j in range(wsisettings.n_samples_per_rep):
-                        new_sample = reps_list.pop()
-                        new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
-                        new_reps.append(new_rep)
-                    res[inst_id] = new_reps
-                    sys.exit()
-
-            return res
-
 class LMBert(SLM):
 
     def __init__(self, cuda_device, bert_model, max_batch_size=20):
@@ -143,6 +97,52 @@ class LMBert(SLM):
             self._lemmas_cache[word] = lemma
             return lemma
 
+    def predict_sent_substitute_representatives_v2(self, inst_id_to_sentence: Dict[str, Tuple[List[str], int]],
+                                                wsisettings: WSISettings) \
+            -> Dict[str, List[Dict[str, int]]]:
+        """
+
+        :param wsisettings: all algorithm settings
+        :param inst_id_to_sentence: dictionary instance_id -> (sentence tokens list, target word index in tokens)
+
+        """
+
+        with torch.no_grad():
+            
+            
+            print("\n\n1st and 2nd elements in inst_id_to_sentence before sorting by length")
+            print(list(inst_id_to_sentence.items())[0])
+            print(list(inst_id_to_sentence.items())[1])
+            
+            sorted_by_len = sorted(inst_id_to_sentence.items(), key=lambda x: len(x[1][0]) + len(x[1][2]))
+            
+            print("\n\n1st and 2nd elements in inst_id_to_sentence after sorting by length")
+            print(sorted_by_len[0])
+            print(sorted_by_len[1])
+            
+            unmasker = pipeline('fill-mask', model='bert-large-cased-whole-word-masking')
+            res = {}
+            for inst_id, (pre, target, post) in sorted_by_len:
+                formatted_sent = pre + target + "(or even [MASK])" + post
+                print("\n\n*****Formatted sentence: ****")
+                print(formatted_sent)
+                reps = unmasker(formatted_sent, top_k= wsisettings.n_represents * wsisettings.n_samples_per_rep)
+                print("\n\nfirst represent: ")
+                print(reps[0])
+                reps_list = [i['token_str'] for i in reps]
+                
+                new_reps = []
+                for i in range(wsisettings.n_represents):
+                    new_rep = {}
+                    for j in range(wsisettings.n_samples_per_rep):
+                        new_sample = reps_list.pop()
+                        new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
+                        new_reps.append(new_rep)
+                    res[inst_id] = new_reps
+                    sys.exit()
+
+            return res
+    
     def predict_sent_substitute_representatives(self, inst_id_to_sentence: Dict[str, Tuple[List[str], int]],
                                                 wsisettings: WSISettings) \
             -> Dict[str, List[Dict[str, int]]]:
