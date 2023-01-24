@@ -123,7 +123,7 @@ class LMBert(SLM):
             unmasker = pipeline('fill-mask', model='bert-large-cased-whole-word-masking')
             res = {}
             for inst_id, (pre, target, post) in sorted_by_len:
-                formatted_sent = pre + target + "(or even [MASK])" + post
+                formatted_sent = pre + target + " (or even [MASK]) " + post
                 print("\n\n*****Formatted sentence: ****")
                 print(formatted_sent)
                 reps = unmasker(formatted_sent, top_k= wsisettings.n_represents * wsisettings.n_samples_per_rep)
@@ -139,6 +139,7 @@ class LMBert(SLM):
                         new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
                         new_reps.append(new_rep)
                     res[inst_id] = new_reps
+                    print(res[inst_id])
                     sys.exit()
 
             return res
