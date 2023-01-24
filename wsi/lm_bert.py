@@ -105,7 +105,7 @@ class LMBert(SLM):
             self._lemmas_cache = {}
             self._spacy = nlp
             for spacyed in tqdm(
-                    nlp.pipe(self.tokenizer.vocab.keys(), batch_size=1000,
+                    nlp.pipe(self.tokenizer.vocab.keys(), batch_size=1000),
                     total=len((self.tokenizer.vocab)), desc='lemmatizing vocab'):
                 lemma = spacyed[0].lemma_ if spacyed[0].lemma_ != '-PRON-' else spacyed[0].lower_
                 self._lemmas_cache[spacyed[0].lower_] = lemma
