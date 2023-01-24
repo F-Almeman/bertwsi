@@ -129,18 +129,22 @@ class LMBert(SLM):
                 reps = unmasker(formatted_sent, top_k= wsisettings.n_represents * wsisettings.n_samples_per_rep)
                 #print("\n\nfirst represent: ")
                 #print(reps[0])
-                reps_list = [i['token_str'] for i in reps]
+                lemma = target.lower() if wsisettings.disable_lemmatization else self._get_lemma(target.lower())
+                reps_list = [i['token_str'] if i['token_str'] != lemma for i in reps]
                 
                 new_reps = []
+                print(len(reps_list))
                 for i in range(wsisettings.n_represents):
                     new_rep = {}
                     for j in range(wsisettings.n_samples_per_rep):
                         new_sample = reps_list.pop()
+                        print(new_sample)
                         new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
                         new_reps.append(new_rep)
+                    print(new_reps)
                     res[inst_id] = new_reps
                     #print(res[inst_id])
-
+            print(res)
             return res
     
     def predict_sent_substitute_representatives(self, inst_id_to_sentence: Dict[str, Tuple[List[str], int]],
