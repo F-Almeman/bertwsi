@@ -40,7 +40,7 @@ class WordSenseInductor:
         unmasker = pipeline('fill-mask', model='bert-large-cased-whole-word-masking')
         for lemma_pos, inst_id_to_sentence in gen:
             inst_ids_to_representatives = \
-                self.bilm.predict_sent_substitute_representatives(unmasker, inst_id_to_sentence=inst_id_to_sentence,
+                self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
      
             for index, row in df.iterrows():
