@@ -212,11 +212,11 @@ class LMBert(SLM):
                 
                 tokenized_sents_vocab_idx = [self.tokenizer.convert_tokens_to_ids(x[0]) for x in batch_sents]
                 
-               ''' 
+                ''' 
                 print("\n\nSize of tokenized_sents_vocab_idx : "+str(len(tokenized_sents_vocab_idx)))
                 print("The first element in this list: ")
                 print(tokenized_sents_vocab_idx[0])
-              '''  
+                '''  
                 
                 max_len = max(len(x) for x in tokenized_sents_vocab_idx)
                 #print("\n\nmax_len: "+str(max_len))
