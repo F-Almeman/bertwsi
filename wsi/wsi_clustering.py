@@ -66,7 +66,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     print(rep_mat[1])
     
     print("\n\nfeature_names_out()")
-    print(dict_vectorizer.get_feature_names_out())
+    print(dict_vectorizer.get_feature_names())
     
     # to_pipeline = [dict_vectorizer]
     if disable_tfidf:
