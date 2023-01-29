@@ -255,11 +255,12 @@ class LMBert(SLM):
 
                 logits_all_tokens = self.bert(torch_input_ids, attention_mask=torch_mask)
                 
-                '''
-                print("\n\nSize of logits_all_tokens : "+str(logits_all_tokens.shape))
+                
+                print("\n\nSize of logits_all_tokens : "+str(len(logits_all_tokens)))
+                print(type(logits_all_tokens))
                 print("The first element in this list: ")
                 print(logits_all_tokens[0])
-                '''
+                
                 
                 logits_target_tokens = torch.zeros((len(batch_sents), logits_all_tokens.shape[2])).to(self.device)
                 for i in range(0, len(batch_sents)):
