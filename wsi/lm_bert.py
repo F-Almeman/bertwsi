@@ -1,6 +1,7 @@
 from .slm_interface import SLM
 import multiprocessing
-from pytorch_pretrained_bert import BertForMaskedLM, tokenization
+from transformers import BertModel, BertTokenizer, BertConfig
+#from pytorch_pretrained_bert import BertForMaskedLM, tokenization
 import torch
 import numpy as np
 from tqdm import tqdm
@@ -38,14 +39,22 @@ class LMBert(SLM):
         device = torch.device("cuda")
 
         with torch.no_grad():
-            model = BertForMaskedLM.from_pretrained(bert_model)
+            
+            '''
+            model = BertModel()
             model.cls.predictions = model.cls.predictions.transform
+            '''
+            config = BertConfig()
+
+            model = BertModel(config)
             model.to(device=device)
+            
             model.eval()
             self.bert = model
 
-            self.tokenizer = tokenization.BertTokenizer.from_pretrained(bert_model)
-
+            #self.tokenizer = tokenization.BertTokenizer.from_pretrained(bert_model)
+            tokenizer = BertTokenizer.from_pretrained(bert_model)
+            
             self.max_sent_len = model.config.max_position_embeddings
             # self.max_sent_len = config.max_position_embeddings
             #
