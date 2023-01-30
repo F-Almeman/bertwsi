@@ -301,10 +301,15 @@ class LMBert(SLM):
                 print("The first element in this list: ")
                 print(logits_target_tokens_joint_patt[0])
                 
+                '''
                 pre_softmax = torch.matmul(
                     logits_target_tokens_joint_patt,
                     self.bert.bert.embeddings.word_embeddings.weight.transpose(0, 1))
-
+                '''
+                pre_softmax = torch.matmul(
+                    logits_target_tokens_joint_patt,
+                    self.bert.embeddings.word_embeddings.weight.transpose(0, 1))
+                
                 topk_vals, topk_idxs = torch.topk(pre_softmax, wsisettings.prediction_cutoff, -1)
 
                 probs_batch = torch.softmax(topk_vals, -1).detach().cpu().numpy()
