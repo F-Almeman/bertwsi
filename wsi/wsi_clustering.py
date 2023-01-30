@@ -47,6 +47,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     logging.info('clustering lemma %s' % lemma)
     representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
     
+    '''
     print("\n\nlen of inst_ids_ordered"+str(len(inst_ids_ordered)))
     print(inst_ids_ordered[0])
     print(inst_ids_ordered[1])
@@ -54,19 +55,22 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     print("\n\nlen of representatives"+str(len(representatives)))
     print(representatives[0])
     print(representatives[1])
+    '''
     
     n_represent = len(representatives) // len(inst_ids_ordered)
     
-    print("\n\nn_represent " + str(n_represent))
+    #print("\n\nn_represent " + str(n_represent))
     dict_vectorizer = DictVectorizer(sparse=False)
     rep_mat = dict_vectorizer.fit_transform(representatives)
     
+    '''
     print("\n\nsize of rep_mat "+str(rep_mat.shape))
     print(rep_mat[0])
     print(rep_mat[1])
     
     print("\n\nfeature_names_out()")
     print(dict_vectorizer.get_feature_names())
+    '''
     
     # to_pipeline = [dict_vectorizer]
     if disable_tfidf:
@@ -74,10 +78,11 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
     
+    '''
     print("\n\nsize of transformed "+str(transformed.shape))
     print(transformed[0])
     print(transformed[1])
-    
+    '''
     
     '''
     model = SentenceTransformer('all-MiniLM-L6-v2')
