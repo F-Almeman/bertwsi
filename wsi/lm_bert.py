@@ -261,6 +261,10 @@ class LMBert(SLM):
                 print("The first element in this list: ")
                 print(logits_all_tokens[0])
                 
+                print("\n\nSize of first element in this list : "+str(logits_all_tokens[0].shape))
+                print(type(logits_all_tokens[0]))
+                print("\n\nSize of second element in this list : "+str(logits_all_tokens[1].shape))
+                
                 
                 logits_target_tokens = torch.zeros((len(batch_sents), logits_all_tokens.shape[2])).to(self.device)
                 for i in range(0, len(batch_sents)):
