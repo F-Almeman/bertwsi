@@ -1,6 +1,7 @@
 from .slm_interface import SLM
 import multiprocessing
 from transformers import BertModel, BertTokenizer, BertConfig
+from transformers import RobertaTokenizer, RobertaModel
 #from pytorch_pretrained_bert import BertForMaskedLM, tokenization
 import torch
 import numpy as np
@@ -44,16 +45,20 @@ class LMBert(SLM):
             model = BertModel()
             model.cls.predictions = model.cls.predictions.transform
             '''
+            '''
             config = BertConfig()
-
             model = BertModel(config)
-            model.to(device=device)
+            '''
             
+            model = RobertaModel.from_pretrained(bert_model)
+            
+            model.to(device=device)
             model.eval()
             self.bert = model
 
             #self.tokenizer = tokenization.BertTokenizer.from_pretrained(bert_model)
-            self.tokenizer = BertTokenizer.from_pretrained(bert_model)
+            #self.tokenizer = BertTokenizer.from_pretrained(bert_model)
+            self.tokenizer = RobertaTokenizer.from_pretrained(bert_model)
             
             self.max_sent_len = model.config.max_position_embeddings
             # self.max_sent_len = config.max_position_embeddings
