@@ -1,7 +1,7 @@
 from .slm_interface import SLM
 import multiprocessing
 from transformers import BertModel, BertTokenizer, BertConfig
-from transformers import RobertaTokenizer, RobertaModel
+from transformers import AutoTokenizer, RobertaModel
 #from pytorch_pretrained_bert import BertForMaskedLM, tokenization
 import torch
 import numpy as np
@@ -58,7 +58,7 @@ class LMBert(SLM):
 
             #self.tokenizer = tokenization.BertTokenizer.from_pretrained(bert_model)
             #self.tokenizer = BertTokenizer.from_pretrained(bert_model)
-            self.tokenizer = RobertaTokenizer.from_pretrained(bert_model)
+            self.tokenizer = AutoTokenizer.from_pretrained(bert_model)
             
             self.max_sent_len = model.config.max_position_embeddings
             # self.max_sent_len = config.max_position_embeddings
