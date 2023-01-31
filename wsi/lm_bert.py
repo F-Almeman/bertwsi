@@ -189,7 +189,8 @@ class LMBert(SLM):
         print("pattern_w: ")
         print(pattern_w)
         '''
-        
+        # Suppress/hide the warning
+        np.seterr(invalid='ignore')
         with torch.no_grad():
             
             '''
