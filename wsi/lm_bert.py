@@ -253,9 +253,9 @@ class LMBert(SLM):
                 print(torch_mask[0])
                 '''
 
+                #logits_all_tokens = self.bert(torch_input_ids, attention_mask=torch_mask)
+                #logits_all_tokens = self.bert.embeddings(torch_input_ids, attention_mask=torch_mask)
                 logits_all_tokens = self.embeddings(torch_input_ids)
-                #logits_all_tokens = self.embeddings(torch_input_ids, attention_mask=torch_mask)
-                
                 
                 print("\n\nSize of logits_all_tokens : "+str(len(logits_all_tokens)))
                 print(type(logits_all_tokens))
