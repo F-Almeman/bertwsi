@@ -50,17 +50,19 @@ class LMBert(SLM):
             
             config = BertConfig()
             model = BertModel(config)
+            model.to(device=device)
+            model.eval()
+            
+            self.bert = model
             self.embeddings = BertEmbeddings(config)
-            self.embeddings.to(device=device)
+            #self.embeddings.to(device=device)
             self.tokenizer = BertTokenizer.from_pretrained(bert_model)
             
             
             #model = RobertaModel.from_pretrained(bert_model)
             #self.tokenizer = AutoTokenizer.from_pretrained(bert_model)
             
-            model.to(device=device)
-            model.eval()
-            self.bert = model
+
             
             
             self.max_sent_len = model.config.max_position_embeddings
@@ -256,7 +258,7 @@ class LMBert(SLM):
 
                 #logits_all_tokens = self.bert(torch_input_ids, attention_mask=torch_mask)
                 #logits_all_tokens = self.bert.embeddings(torch_input_ids, attention_mask=torch_mask)
-                logits_all_tokens = self.embeddings(torch_input_ids.to(device=self.device))
+                logits_all_tokens = self.embeddings(torch_input_ids)
                 
                 print("\n\nSize of logits_all_tokens : "+str(len(logits_all_tokens)))
                 print(type(logits_all_tokens))
