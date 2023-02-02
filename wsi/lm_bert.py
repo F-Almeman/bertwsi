@@ -1,7 +1,8 @@
 from .slm_interface import SLM
 import multiprocessing
 from transformers import BertModel, BertTokenizer, BertConfig
-from transformers import AutoTokenizer, RobertaModel
+from transformers.models.bert.modeling_bert import BertEmbeddings
+#from transformers import AutoTokenizer, RobertaModel
 #from pytorch_pretrained_bert import BertForMaskedLM, tokenization
 import torch
 import numpy as np
@@ -44,27 +45,27 @@ class LMBert(SLM):
             '''
             model = BertModel()
             model.cls.predictions = model.cls.predictions.transform
-            '''
-            '''
-            config = BertConfig()
-            model = BertModel(config)
+            self.tokenizer = tokenization.BertTokenizer.from_pretrained(bert_model)
             '''
             
-            model = RobertaModel.from_pretrained(bert_model)
+            config = BertConfig()
+            model = BertModel(config)
+            self.embeddings = BertEmbeddings(config)
+            self.tokenizer = BertTokenizer.from_pretrained(bert_model)
+            
+            
+            #model = RobertaModel.from_pretrained(bert_model)
+            #self.tokenizer = AutoTokenizer.from_pretrained(bert_model)
             
             model.to(device=device)
             model.eval()
             self.bert = model
-
-            #self.tokenizer = tokenization.BertTokenizer.from_pretrained(bert_model)
-            #self.tokenizer = BertTokenizer.from_pretrained(bert_model)
-            self.tokenizer = AutoTokenizer.from_pretrained(bert_model)
+            
             
             self.max_sent_len = model.config.max_position_embeddings
-            # self.max_sent_len = config.max_position_embeddings
-            #
+            
             self.max_batch_size = max_batch_size
-            #
+            
             self.lemmatized_vocab = []
             self.original_vocab = []
 
@@ -183,14 +184,6 @@ class LMBert(SLM):
         pattern_str, pattern_w = list(zip(*patterns))
         pattern_w = torch.from_numpy(np.array(pattern_w, dtype=np.float32).reshape(-1, 1)).to(device=self.device)
         
-        '''
-        print("\n\npattern_str: ")
-        print(pattern_str)
-        print("pattern_w: ")
-        print(pattern_w)
-        '''
-        # Suppress/hide the warning
-        np.seterr(invalid='ignore')
         with torch.no_grad():
             
             '''
@@ -260,18 +253,14 @@ class LMBert(SLM):
                 print(torch_mask[0])
                 '''
 
-                logits_all_tokens = self.bert(torch_input_ids, attention_mask=torch_mask)
+                logits_all_tokens = self.embeddings(torch_input_ids, attention_mask=torch_mask)
                 
-                '''
+                
                 print("\n\nSize of logits_all_tokens : "+str(len(logits_all_tokens)))
                 print(type(logits_all_tokens))
-                print("The first element in this list: ")
-                print(logits_all_tokens[0])
-                
                 print("\n\nSize of first element in this list : "+str(logits_all_tokens[0].shape))
-                print(type(logits_all_tokens[0]))
                 print("\n\nSize of second element in this list : "+str(logits_all_tokens[1].shape))
-                '''
+                
                 '''
                 logits_target_tokens = torch.zeros((len(batch_sents), logits_all_tokens.shape[2])).to(self.device)
                 for i in range(0, len(batch_sents)):
