@@ -189,72 +189,72 @@ class LMBert(SLM):
         
         with torch.no_grad():
             
-            '''
+            
             print("\n\n1st and 2nd elements in inst_id_to_sentence before sorting by length")
             print(list(inst_id_to_sentence.items())[0])
             print(list(inst_id_to_sentence.items())[1])
-            '''
+            
             
             sorted_by_len = sorted(inst_id_to_sentence.items(), key=lambda x: len(x[1][0]) + len(x[1][2]))
             
-            '''
+            
             print("\n\n1st and 2nd elements in inst_id_to_sentence after sorting by length")
             print(sorted_by_len[0])
             print(sorted_by_len[1])
-            '''
+            
             
             res = {}
-            #print("\n\n# of batches " + str(len(list(get_batches(sorted_by_len,self.max_batch_size // n_patterns)))))
+            print("\n\n# of batches " + str(len(list(get_batches(sorted_by_len,self.max_batch_size // n_patterns)))))
             for batch in get_batches(sorted_by_len,
                                      self.max_batch_size // n_patterns):
 
                 batch_sents = []
                 for inst_id, (pre, target, post) in batch:
-                    #print("*****Formatted sentences: ****")
+                    print("*****Formatted sentences: ****")
                     for pattern in pattern_str:
                         batch_sents.append(self.format_sentence_to_pattern(pre, target, post, pattern))
-                '''
+                
                 print("\n\nSize of batch_sents (It has the sentences formatted based on pattern): "+str(len(batch_sents)))
                 print("The first element in this list: ")
                 print(batch_sents[0])
                 print("The second element in this list: ")
                 print(batch_sents[1])
-                '''
+                
                 
                 tokenized_sents_vocab_idx = [self.tokenizer.convert_tokens_to_ids(x[0]) for x in batch_sents]
                 
-                '''
+                
                 print("\n\nSize of tokenized_sents_vocab_idx : "+str(len(tokenized_sents_vocab_idx)))
                 print("The first element in this list: ")
                 print(tokenized_sents_vocab_idx[0])
-                '''
+                
                 
                 max_len = max(len(x) for x in tokenized_sents_vocab_idx)
-                #print("\n\nmax_len: "+str(max_len))
+                print("\n\nmax_len: "+str(max_len))
                 batch_input = np.zeros((len(tokenized_sents_vocab_idx), max_len), dtype=np.long)
                 for idx, vals in enumerate(tokenized_sents_vocab_idx):
                     batch_input[idx, 0:len(vals)] = vals
                     
-                '''
+                
                 print("Size of batch_input : "+str(batch_input.shape))
                 print("The first element in this list: ")
                 print(batch_input[0])
-                '''
+                
                 
                 torch_input_ids = torch.tensor(batch_input, dtype=torch.long).to(device=self.device)
                 
-                '''
+                
                 print("\n\nSize of torch_input_ids : "+str(torch_input_ids.shape))
                 print("The first element in this list: ")
                 print(torch_input_ids[0])
-                '''
+                
                 torch_mask = torch_input_ids != 0
                 
-                '''
+                
                 print("\n\ntorch_mask"+ str(torch_mask.shape))
                 print("torch_mask")
                 print(torch_mask[0])
-                '''
+                
 
                 #logits_all_tokens = self.bert(torch_input_ids, attention_mask=torch_mask)
                 #logits_all_tokens = self.bert.embeddings(torch_input_ids, attention_mask=torch_mask)
@@ -263,8 +263,9 @@ class LMBert(SLM):
                 print("\n\nSize of logits_all_tokens : "+str(len(logits_all_tokens)))
                 print(type(logits_all_tokens))
                 print("\n\nSize of first element in this list : "+str(logits_all_tokens[0].shape))
+                print(logits_all_tokens[0])
                 print("\n\nSize of second element in this list : "+str(logits_all_tokens[1].shape))
-                
+                print(logits_all_tokens[1])
                 '''
                 logits_target_tokens = torch.zeros((len(batch_sents), logits_all_tokens.shape[2])).to(self.device)
                 for i in range(0, len(batch_sents)):
