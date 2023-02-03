@@ -270,16 +270,21 @@ class LMBert(SLM):
                 logits_target_tokens = torch.zeros((len(batch_sents), logits_all_tokens.shape[2])).to(self.device)
                 for i in range(0, len(batch_sents)):
                     logits_target_tokens[i, :] = logits_all_tokens[i, batch_sents[i][1], :]
-                '''
+                
                 logits_target_tokens = torch.zeros((len(batch_sents), logits_all_tokens[0].shape[2])).to(self.device)
                 for i in range(0, len(batch_sents)):
                     logits_target_tokens[i, :] = logits_all_tokens[0][i, batch_sents[i][1], :]
                 
                 '''
+                logits_target_tokens = torch.zeros((len(batch_sents), logits_all_tokens[0].shape[1])).to(self.device)
+                for i in range(0, len(batch_sents)):
+                    logits_target_tokens[i, :] = logits_all_tokens[i][batch_sents[i][1], :]
+                
+                
                 print("\n\nSize of logits_target_tokens : "+str(logits_target_tokens.shape))
                 print("The first element in this list: ")
                 print(logits_target_tokens[0])
-                '''
+                
                 
                 logits_target_tokens_joint_patt = torch.zeros(
                     (len(batch_sents) // n_patterns, logits_target_tokens.shape[1])).to(
@@ -299,11 +304,11 @@ class LMBert(SLM):
                     logits_target_tokens_joint_patt[i // n_patterns, :] = (
                             logits_target_tokens[i:i + n_patterns, :] * pattern_w).sum(0)
 
-                '''
+                
                 print("\n\nSize of logits_target_tokens_joint_patt : "+str(logits_target_tokens_joint_patt.shape))
                 print("The first element in this list: ")
                 print(logits_target_tokens_joint_patt[0])
-                '''
+                
                 '''
                 pre_softmax = torch.matmul(
                     logits_target_tokens_joint_patt,
@@ -317,19 +322,19 @@ class LMBert(SLM):
 
                 probs_batch = torch.softmax(topk_vals, -1).detach().cpu().numpy()
                 
-                '''
+                
                 print("\n\nSize of probs_batch : "+str(probs_batch.shape))
                 print("The first element in this list: ")
                 print(probs_batch[0])
-                '''
+                
                 
                 topk_idxs_batch = topk_idxs.detach().cpu().numpy()
                
-                '''
+                
                 print("\n\nSize of topk_idxs_batch : "+ str(topk_idxs_batch.shape))
                 print("The first element in this list: ")
                 print(topk_idxs_batch[0])
-                '''
+                
                 
                 for (inst_id, (pre, target, post)), probs, topk_idxs in zip(batch, probs_batch, topk_idxs_batch):
                     lemma = target.lower() if wsisettings.disable_lemmatization else self._get_lemma(target.lower())
@@ -339,12 +344,12 @@ class LMBert(SLM):
                     target_vocab = self.original_vocab if wsisettings.disable_lemmatization else self.lemmatized_vocab
                    
                 
-                    '''
+                    
                     print("\n\nType of target_vocab : "+ str(type(target_vocab)))
                     print(target_vocab)
                     
                     print("\n\nProbs")
-                    '''
+                    
                     
                     for i in range(wsisettings.prediction_cutoff):
                             if target_vocab[topk_idxs[i]] == lemma:
@@ -356,20 +361,20 @@ class LMBert(SLM):
                         np.random.choice(topk_idxs, wsisettings.n_represents * wsisettings.n_samples_per_rep,
                                          p=probs))
                     
-                    '''
+                    
                     print("\n\ntopk_idxs")
                     print(topk_idxs) # a list of numbers
                     print(topk_idxs.shape) # a tuple with size i guess
                     print(wsisettings.n_represents) # a number
                     print(wsisettings.n_samples_per_rep) # a number
-                    '''
+                    
                     logging.info('some samples: %s' % [target_vocab[x] for x in new_samples[:5]])
                     
-                    '''
+                    
                     print("\n\nSize of new_samples : "+ str(len(new_samples)))
                     print("The first element in this list: ")
                     print(new_samples[0])
-                    '''
+                    
 
                     new_reps = []
                     for i in range(wsisettings.n_represents):
@@ -379,7 +384,7 @@ class LMBert(SLM):
                             new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
                         new_reps.append(new_rep)
                     res[inst_id] = new_reps
-                    #sys.exit()
+                    sys.exit()
 
             return res
 
