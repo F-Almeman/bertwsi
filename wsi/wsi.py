@@ -25,12 +25,13 @@ class WordSenseInductor:
         if print_progress:
             gen = tqdm(gen, desc=f'predicting substitutes {ds_name}')
         for lemma_pos, inst_id_to_sentence in gen:
-            if lemma_pos == "assert.v" or lemma_pos == "class.n":
-                inst_ids_to_representatives = \
+            print(lemma_pos)
+            if lemma_pos != "assert.v" or lemma_pos != "class.n":
+                continue 
+            print(lemma_pos)
+            inst_ids_to_representatives = \
                     self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
-            else:
-                inst_ids_to_representatives = {}
                 
             clusters, statistics = cluster_inst_ids_representatives(
                 inst_ids_to_representatives=inst_ids_to_representatives,
