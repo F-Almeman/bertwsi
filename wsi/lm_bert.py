@@ -120,12 +120,6 @@ class LMBert(SLM):
         with torch.no_grad():
             sorted_by_len = sorted(inst_id_to_sentence.items(), key=lambda x: len(x[1][0]) + len(x[1][2]))
             
-            
-            print("\n\n1st and 2nd elements in inst_id_to_sentence after sorting by length")
-            print(list(inst_id_to_sentence.items())[0])
-            print(list(inst_id_to_sentence.items())[1])
-            
-            
             res = {}
             for batch in get_batches(sorted_by_len,
                                      self.max_batch_size // n_patterns):
@@ -203,8 +197,6 @@ class LMBert(SLM):
                 print("\n\nSize of logits_target_tokens_joint_patt : "+str(logits_target_tokens_joint_patt.shape))
                 print("The first element in this list: ")
                 print(logits_target_tokens_joint_patt[0])
-                print("The second element in this list: ")
-                print(logits_target_tokens_joint_patt[1])
                 
                 pre_softmax = torch.matmul(
                     logits_target_tokens_joint_patt,
@@ -214,21 +206,15 @@ class LMBert(SLM):
                 print("\n\nSize of pre_softmax : "+str(pre_softmax.shape))
                 print("The first element in this list: ")
                 print(pre_softmax[0])
-                print("The second element in this list: ")
-                print(pre_softmax[1])
                 
                 topk_vals, topk_idxs = torch.topk(pre_softmax, wsisettings.prediction_cutoff, -1)
                 print("\n\nSize of topk_vals : "+str(pre_softmax.shape))
                 print("The first element in this list: ")
                 print(topk_vals[0])
-                print("The second element in this list: ")
-                print(topk_vals[1])
                 
                 print("\n\nSize of topk_idxs : "+str(topk_idxs.shape))
                 print("The first element in this list: ")
                 print(topk_idxs[0])
-                print("The second element in this list: ")
-                print(topk_idxs[1])
                 
                 
                 probs_batch = torch.softmax(topk_vals, -1).detach().cpu().numpy()
@@ -236,20 +222,13 @@ class LMBert(SLM):
                 print("\n\nSize of probs_batch : "+str(probs_batch.shape))
                 print("The first element in this list: ")
                 print(probs_batch[0])
-                print("The second element in this list: ")
-                print(probs_batch[1])
                 
                 topk_idxs_batch = topk_idxs.detach().cpu().numpy()
                 print("\n\nSize of topk_idxs_batch : "+ str(topk_idxs_batch.shape))
                 print("The first element in this list: ")
                 print(topk_idxs_batch[0])
-                print("The second element in this list: ")
-                print(topk_idxs_batch[1])
 
                 for (inst_id, (pre, target, post)), probs, topk_idxs in zip(batch, probs_batch, topk_idxs_batch):
-                    print(inst_id)
-                    print(pre)
-                    print(post)
                     lemma = target.lower() if wsisettings.disable_lemmatization else self._get_lemma(target.lower())
                     logging.info(
                         f'instance {inst_id} sentence: {pre} --{target}-- {post}')
@@ -276,7 +255,6 @@ class LMBert(SLM):
                         new_rep = {}
                         for j in range(wsisettings.n_samples_per_rep):
                             new_sample = target_vocab[new_samples.pop()]
-                            print("new_sample"+new_sample)
                             new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
                         print(new_rep)
                         new_reps.append(new_rep)
