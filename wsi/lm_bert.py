@@ -34,8 +34,8 @@ class LMBert(SLM):
                 cuda_device, bert_model,
                 max_batch_size))
 
-        device = torch.device(f'cuda:{cuda_device}') if cuda_device >= 0 else torch.device('cpu')
-
+        device = torch.device("cuda")
+        
         with torch.no_grad():
             model = BertForMaskedLM.from_pretrained(bert_model)
             model.cls.predictions = model.cls.predictions.transform
