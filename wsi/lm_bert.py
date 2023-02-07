@@ -57,7 +57,7 @@ class LMBert(SLM):
             self.lemmatized_vocab = []
             self.original_vocab = []
 
-          import spacy
+            import spacy
             nlp = spacy.load("en", disable=['ner', 'parser'])
             self._lemmas_cache = {}
             self._spacy = nlp
