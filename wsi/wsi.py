@@ -8,9 +8,6 @@ import logging
 from .WSISettings import WSISettings
 import os
 import numpy as np
-import pandas as pd
-from transformers import pipeline
-
 
 
 class WordSenseInductor:
@@ -18,57 +15,24 @@ class WordSenseInductor:
         self.bilm = lm
 
     def _perform_wsi_on_ds_gen(self, ds_name, gen, wsisettings: WSISettings, eval_proc, print_progress=False):
-        
-        # The generated definitions from dm model (WORD, WORD_ID, EXAMPLE, DEFINITION)
-        df = pd.read_csv('./resources/bart_wsi_test_evaluation_2010_reranking.csv')
-        
         ds_by_target = defaultdict(dict)
         for pre, target, post, inst_id in gen:
             lemma_pos = inst_id.rsplit('.', 1)[0]
-            #ds_by_target[lemma_pos][inst_id] = (pre, target, post, df.loc[df['WORD_ID'] == inst_id]['DEFINITION'].values[0])
             ds_by_target[lemma_pos][inst_id] = (pre, target, post)
 
         inst_id_to_sense = {}
         gen = ds_by_target.items()
         if print_progress:
             gen = tqdm(gen, desc=f'predicting substitutes {ds_name}')
-        
-        # Get the definitions for each inst_id for that lemma_pos
-        df = df.groupby(['WORD'], as_index=False)['WORD_ID','DEFINITION'].agg(lambda x: list(list(x)))
-        
-        # Start the work for each lemma_pos
-        unmasker = pipeline('fill-mask', model='bert-large-cased-whole-word-masking')
         for lemma_pos, inst_id_to_sentence in gen:
             inst_ids_to_representatives = \
-                self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
+                    self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
-     
-            for index, row in df.iterrows():
-                if row['WORD'] == lemma_pos:
-                    inst_id_to_definition = {row['WORD_ID'][i]: row['DEFINITION'][i] for i in range(len(row['WORD_ID']))}
-                    break
-            
-          
-            print("**************"+"\n"+lemma_pos+"\n")
-            for ids in inst_id_to_sentence:
-                print("\n"+ids)
-                print(inst_id_to_sentence[ids])
-                print(inst_id_to_definition[ids])
-                for i in inst_ids_to_representatives[ids]:
-                    print(i)
-            '''
-            clusters, statistics = cluster_inst_ids_representatives(
-                inst_ids_to_representatives=inst_ids_to_representatives, inst_id_to_definition=inst_id_to_definition,
-                max_number_senses=wsisettings.max_number_senses,min_sense_instances=wsisettings.min_sense_instances,
-                disable_tfidf=wsisettings.disable_tfidf,explain_features=True)
-            
-            '''
+                
             clusters, statistics = cluster_inst_ids_representatives(
                 inst_ids_to_representatives=inst_ids_to_representatives,
                 max_number_senses=wsisettings.max_number_senses,min_sense_instances=wsisettings.min_sense_instances,
                 disable_tfidf=wsisettings.disable_tfidf,explain_features=True)
-            
-            
             inst_id_to_sense.update(clusters)
             if statistics:
                 logging.info('Sense cluster statistics:')
@@ -120,7 +84,6 @@ class WordSenseInductor:
         # semeval_dataset_by_target is a dict from target to dicts of instances with their sentence
         # so semeval_dataset_by_target['book.n']['book.n.12'] is the sentence tokens of the 'book.n.12' instance
         # and the index of book in these tokens
-
         '''
         scores2013,corr = self._perform_wsi_on_ds_gen(
             'SemEval2013',
@@ -129,7 +92,6 @@ class WordSenseInductor:
             lambda inst2sense, outkey:
             evaluate_labeling_2013('./resources/SemEval-2013-Task-13-test-data', inst2sense, outkey),
             print_progress=print_progress)
-
         fnmi = scores2013['all']['FNMI']
         fbc = scores2013['all']['FBC']
         msg = 'SemEval 2013 FNMI %.2f FBC %.2f AVG %.2f' % (fnmi * 100, fbc * 100, np.sqrt(fnmi * fbc) * 100)
