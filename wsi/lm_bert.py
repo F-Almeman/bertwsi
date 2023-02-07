@@ -125,9 +125,11 @@ class LMBert(SLM):
                                      self.max_batch_size // n_patterns):
 
                 batch_sents = []
+                ids = []
                 for inst_id, (pre, target, post) in batch:
                     for pattern in pattern_str:
                         batch_sents.append(self.format_sentence_to_pattern(pre, target, post, pattern))
+                        ids.append(inst_id)
 
                 
                 print("\n\nSize of batch_sents (It has the sentences formatted based on pattern): "+str(len(batch_sents)))
@@ -135,6 +137,7 @@ class LMBert(SLM):
                 print(batch_sents[0])
                 print("The second element in this list: ")
                 print(batch_sents[1])
+                print("The instance id is: "+str(ids[0]))
                
                 
                 tokenized_sents_vocab_idx = [self.tokenizer.convert_tokens_to_ids(x[0]) for x in batch_sents]
