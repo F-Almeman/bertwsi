@@ -208,7 +208,7 @@ class LMBert(SLM):
                 
                 pre_softmax = torch.matmul(
                     logits_target_tokens_joint_patt,
-                    self.bert.bert.embeddings.word_embeddings.weight.transpose(0, 1))
+                    self.bert.embeddings.word_embeddings.weight.transpose(0, 1))
 
                 
                 print("\n\nSize of pre_softmax : "+str(pre_softmax.shape))
