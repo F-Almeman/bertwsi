@@ -172,7 +172,7 @@ class LMBert(SLM):
 
                 torch_mask = torch_input_ids != 0
 
-                logits_all_tokens = self.bert.embeddings(torch_input_ids, attention_mask=torch_mask)
+                logits_all_tokens = self.bert.bert.embeddings(torch_input_ids, attention_mask=torch_mask)
                 
                 print("\n\nSize of logits_all_tokens : "+str(len(logits_all_tokens)))
                 print(type(logits_all_tokens))
