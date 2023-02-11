@@ -9,6 +9,7 @@ from scipy.spatial.distance import pdist, cdist
 from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
+from sentence_transformers import SentenceTransformer
 
 import pickle
 
