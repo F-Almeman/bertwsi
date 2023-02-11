@@ -40,13 +40,14 @@ class LMBert(SLM):
 
         with torch.no_grad():
             
-            config = BertConfig()
-            model = BertModel(config)
+            #config = BertConfig()
+            #model = BertModel(config)
+            model = BertModel.from_pretrained(bert_model)
             model.to(device=device)
             model.eval()
             
             self.bert = model
-            self.embeddings = BertEmbeddings(config)
+            self.embeddings = BertEmbeddings()
             self.embeddings.to(device=device)
             self.tokenizer = BertTokenizer.from_pretrained(bert_model)
             
