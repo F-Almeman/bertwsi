@@ -45,7 +45,7 @@ class LMBert(SLM):
             model.eval()
             
             self.bert = model
-            config = BertConfig.from_pretrained(args.bert_model)
+            config = BertConfig.from_pretrained(bert_model)
             self.embeddings = BertEmbeddings(config)
             self.embeddings.to(device=device)
             self.tokenizer = BertTokenizer.from_pretrained(bert_model)
