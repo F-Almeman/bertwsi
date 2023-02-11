@@ -39,15 +39,14 @@ class LMBert(SLM):
         device = torch.device("cuda")
 
         with torch.no_grad():
-            
-            #config = BertConfig()
-            #model = BertModel(config)
+
             model = BertModel.from_pretrained(bert_model)
             model.to(device=device)
             model.eval()
             
             self.bert = model
-            self.embeddings = BertEmbeddings()
+            config = BertConfig.from_pretrained(args.bert_model)
+            self.embeddings = BertEmbeddings(config)
             self.embeddings.to(device=device)
             self.tokenizer = BertTokenizer.from_pretrained(bert_model)
             
