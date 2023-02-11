@@ -7,6 +7,7 @@ WSISettings = namedtuple('WSISettings', ['n_represents', 'n_samples_per_rep', 'c
                                          ])
 
 DEFAULT_PARAMS = WSISettings(
+    dm_model = "DM2"
     n_represents=15,
     n_samples_per_rep=20,
     cuda_device=1,
