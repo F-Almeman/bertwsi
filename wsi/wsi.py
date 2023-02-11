@@ -8,6 +8,7 @@ import logging
 from .WSISettings import WSISettings
 import os
 import numpy as np
+import pandas as pd
 
 
 class WordSenseInductor:
