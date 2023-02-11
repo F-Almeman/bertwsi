@@ -37,8 +37,7 @@ class LMBert(SLM):
         device = torch.device("cuda")
         
         with torch.no_grad():
-            config = BertConfig()
-            model = BertModel(config)
+            model = BertModel.from_pretrained(bert_model)
             model.to(device=device)
             model.eval()
             self.bert = model
