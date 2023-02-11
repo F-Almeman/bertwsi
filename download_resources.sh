@@ -21,3 +21,12 @@ with zipfile.ZipFile("./resources/se2010eval.zip","r") as zip_ref:
 EOF
 
 tar -C resources/SemEval-2010 -xzf resources/se2010test_data.tar.gz
+
+echo downloading BART generated definitions...
+
+# v2
+wget "https://drive.google.com/uc?export=download&id=1e9nXCxUI3X1raY7-fD3E1SCb3no4oRur" -O resources/bart_wsi_test_evaluation_2010_reranking_DM2.csv
+
+# v3
+#wget "https://drive.google.com/uc?export=download&id=1GXgMsTV1lr8HgkfUQ0OMQCa_tz1hcNGg" -O resources/bart_wsi_test_evaluation_2010_reranking_DM3.csv
+
