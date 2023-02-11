@@ -15,6 +15,10 @@ class WordSenseInductor:
         self.bilm = lm
 
     def _perform_wsi_on_ds_gen(self, ds_name, gen, wsisettings: WSISettings, eval_proc, print_progress=False):
+        
+        # The generated definitions from dm model (WORD, WORD_ID, EXAMPLE, DEFINITION)
+        df = pd.read_csv(f'./resources/bart_wsi_test_evaluation_2010_reranking_{wsisettings.dm_model}.csv')
+        
         ds_by_target = defaultdict(dict)
         for pre, target, post, inst_id in gen:
             lemma_pos = inst_id.rsplit('.', 1)[0]
@@ -24,13 +28,21 @@ class WordSenseInductor:
         gen = ds_by_target.items()
         if print_progress:
             gen = tqdm(gen, desc=f'predicting substitutes {ds_name}')
+        
+        # Get the definitions for each inst_id for that lemma_pos
+        df = df.groupby(['WORD'], as_index=False)['WORD_ID','DEFINITION'].agg(lambda x: list(list(x)))
+        
         for lemma_pos, inst_id_to_sentence in gen:
             inst_ids_to_representatives = \
                     self.bilm.predict_sent_substitute_representatives(inst_id_to_sentence=inst_id_to_sentence,
                                                                   wsisettings=wsisettings)
-                
+            for index, row in df.iterrows():
+                if row['WORD'] == lemma_pos:
+                    inst_id_to_definition = {row['WORD_ID'][i]: row['DEFINITION'][i] for i in range(len(row['WORD_ID']))}
+                    break
+                    
             clusters, statistics = cluster_inst_ids_representatives(
-                inst_ids_to_representatives=inst_ids_to_representatives,
+                inst_ids_to_representatives=inst_ids_to_representatives, inst_id_to_definition=inst_id_to_definition, 
                 max_number_senses=wsisettings.max_number_senses,min_sense_instances=wsisettings.min_sense_instances,
                 disable_tfidf=wsisettings.disable_tfidf,explain_features=True)
             inst_id_to_sense.update(clusters)
