@@ -182,10 +182,9 @@ class LMBert(SLM):
                             if target_vocab[topk_idxs[i]] == lemma:
                                 probs[i] = 0
                     probs /= np.sum(probs)
-
                     new_samples = list(
                         np.random.choice(topk_idxs, wsisettings.n_represents * wsisettings.n_samples_per_rep,
-                                         p=probs)))
+                                         p=probs))
                     
                     logging.info('some samples: %s' % [target_vocab[x] for x in new_samples[:5]])
 
