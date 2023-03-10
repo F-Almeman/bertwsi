@@ -130,66 +130,27 @@ class LMBert(SLM):
                     for pattern in pattern_str:
                         batch_sents.append(self.format_sentence_to_pattern(pre, target, post, pattern))
                         ids.append(inst_id)
-
-                
-                print("\n\nSize of batch_sents (It has the sentences formatted based on pattern): "+str(len(batch_sents)))
-                print("The first element in this list: ")
-                print(batch_sents[0])
-                print("The second element in this list: ")
-                print(batch_sents[1])
-                print("The instance id is: "+str(ids[0]))
                
                 
                 tokenized_sents_vocab_idx = [self.tokenizer.convert_tokens_to_ids(x[0]) for x in batch_sents]
-                      
-                
-                print("\n\nSize of tokenized_sents_vocab_idx : "+str(len(tokenized_sents_vocab_idx)))
-                print("The first element in this list: ")
-                print(tokenized_sents_vocab_idx[0])
-                print("The second element in this list: ")
-                print(tokenized_sents_vocab_idx[1])
+                    
 
                 max_len = max(len(x) for x in tokenized_sents_vocab_idx)
                 batch_input = np.zeros((len(tokenized_sents_vocab_idx), max_len), dtype=np.long)
                 for idx, vals in enumerate(tokenized_sents_vocab_idx):
                     batch_input[idx, 0:len(vals)] = vals
 
-                print("Size of batch_input : "+str(batch_input.shape))
-                print("The first element in this list: ")
-                print(batch_input[0])
-                print("The second element in this list: ")
-                print(batch_input[1])
-                
                 torch_input_ids = torch.tensor(batch_input, dtype=torch.long).to(device=self.device)
-                
-                
-                print("\n\nSize of torch_input_ids : "+str(torch_input_ids.shape))
-                print("The first element in this list: ")
-                print(torch_input_ids[0])
-                print("The second element in this list: ")
-                print(torch_input_ids[1])
                 
 
                 torch_mask = torch_input_ids != 0
 
                 logits_all_tokens = self.bert(torch_input_ids, attention_mask=torch_mask)
-                
-                print("\n\nSize of logits_all_tokens : "+str(len(logits_all_tokens)))
-                print(type(logits_all_tokens))
-                print("\n\nSize of first element in this list : "+str(logits_all_tokens[0].shape))
-                print(logits_all_tokens[0])
-                print("\n\nSize of second element in this list : "+str(logits_all_tokens[1].shape))
-                print(logits_all_tokens[1])
 
                 logits_target_tokens = torch.zeros((len(batch_sents), logits_all_tokens.shape[2])).to(self.device)
                 for i in range(0, len(batch_sents)):
                     logits_target_tokens[i, :] = logits_all_tokens[i, batch_sents[i][1], :]
-                print("\n\nSize of logits_target_tokens : "+str(logits_target_tokens.shape))
-                print("The first element in this list: ")
-                print(logits_target_tokens[0])
-                print("The second element in this list: ")
-                print(logits_target_tokens[1])
-                
+
                 logits_target_tokens_joint_patt = torch.zeros(
                     (len(batch_sents) // n_patterns, logits_target_tokens.shape[1])).to(
                     self.device)
@@ -197,39 +158,17 @@ class LMBert(SLM):
                     logits_target_tokens_joint_patt[i // n_patterns, :] = (
                             logits_target_tokens[i:i + n_patterns, :] * pattern_w).sum(0)
                 
-                print("\n\nSize of logits_target_tokens_joint_patt : "+str(logits_target_tokens_joint_patt.shape))
-                print("The first element in this list: ")
-                print(logits_target_tokens_joint_patt[0])
                 
                 pre_softmax = torch.matmul(
                     logits_target_tokens_joint_patt,
                     self.bert.bert.embeddings.word_embeddings.weight.transpose(0, 1))
-
-                
-                print("\n\nSize of pre_softmax : "+str(pre_softmax.shape))
-                print("The first element in this list: ")
-                print(pre_softmax[0])
-                
+ 
                 topk_vals, topk_idxs = torch.topk(pre_softmax, wsisettings.prediction_cutoff, -1)
-                print("\n\nSize of topk_vals : "+str(pre_softmax.shape))
-                print("The first element in this list: ")
-                print(topk_vals[0])
-                
-                print("\n\nSize of topk_idxs : "+str(topk_idxs.shape))
-                print("The first element in this list: ")
-                print(topk_idxs[0])
                 
                 
                 probs_batch = torch.softmax(topk_vals, -1).detach().cpu().numpy()
-                
-                print("\n\nSize of probs_batch : "+str(probs_batch.shape))
-                print("The first element in this list: ")
-                print(probs_batch[0])
-                
+
                 topk_idxs_batch = topk_idxs.detach().cpu().numpy()
-                print("\n\nSize of topk_idxs_batch : "+ str(topk_idxs_batch.shape))
-                print("The first element in this list: ")
-                print(topk_idxs_batch[0])
 
                 for (inst_id, (pre, target, post)), probs, topk_idxs in zip(batch, probs_batch, topk_idxs_batch):
                     lemma = target.lower() if wsisettings.disable_lemmatization else self._get_lemma(target.lower())
@@ -246,11 +185,7 @@ class LMBert(SLM):
                     new_samples = list(
                         np.random.choice(topk_idxs, wsisettings.n_represents * wsisettings.n_samples_per_rep,
                                          p=probs))
-                    
-                    print("\n\nSize of new_samples : "+ str(len(new_samples)))
-                    print("The first element in this list: ")
-                    print(new_samples[0])
-                    
+
                     logging.info('some samples: %s' % [target_vocab[x] for x in new_samples[:5]])
 
                     new_reps = []
@@ -259,7 +194,6 @@ class LMBert(SLM):
                         for j in range(wsisettings.n_samples_per_rep):
                             new_sample = target_vocab[new_samples.pop()]
                             new_rep[new_sample] = 1  # rep.get(new_sample, 0) + 1
-                        print(new_rep)
                         new_reps.append(new_rep)
                     res[inst_id] = new_reps
 
