@@ -51,13 +51,13 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
     for r in inst_ids_ordered[:3]:
-          pritn(r)
+      print(r)
       
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
     logging.info('clustering lemma %s' % lemma)
     representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
     for r in representatives[:3]:
-      pritn(r)
+      print(r)
       
     n_represent = len(representatives) // len(inst_ids_ordered)
     dict_vectorizer = DictVectorizer(sparse=False)
