@@ -12,7 +12,7 @@ from sklearn.preprocessing import normalize
 from sentence_transformers import SentenceTransformer
 
 import pickle
-import sys
+
 
 # with open('gold_n_senses.pickle', 'rb') as fin:
 #     gold_n_senses = pickle.load(fin)
@@ -40,24 +40,12 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
 
       return new_embed
     
-    for key, value in inst_ids_to_representatives.items():
-      print(key)
-      print(value)
-     
-    for key, value in inst_id_to_definition.items():
-      print(key)
-      print(value)   
-
-    
+  
     inst_ids_ordered = list(inst_ids_to_representatives.keys())
-    for r in inst_ids_ordered[:3]:
-      print(r)
       
     lemma = inst_ids_ordered[0].rsplit('.', 1)[0]
     logging.info('clustering lemma %s' % lemma)
     representatives = [y for x in inst_ids_ordered for y in inst_ids_to_representatives[x]]
-    for r in representatives[:3]:
-      print(r)
       
     n_represent = len(representatives) // len(inst_ids_ordered)
     dict_vectorizer = DictVectorizer(sparse=False)
@@ -68,12 +56,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
     
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    #model = SentenceTransformer('all-MiniLM-L6-v2')
+    model = SentenceTransformer('sentence-transformers/LaBSE')
     definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]  
-    for d in definitions[:3]:
-      print(d)
-    
-    sys.exit()
     definitions_embeddings = model.encode(definitions)
     
    
