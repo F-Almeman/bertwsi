@@ -10,7 +10,7 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
 from sentence_transformers import SentenceTransformer
-
+import sys
 import pickle
 
 
@@ -40,7 +40,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         #embed = np.kron(def_vec, vec_1)
         embed_1 = np.multiply.outer(def_vec, vec_1)
         print(embed_1.shape)
-        new_embed.append(embed_1)
+        new_embed.append(embed)
 
       return new_embed
     
@@ -71,13 +71,14 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         combined_embeddings.append(combined_embed)
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
+    print(combined_embeddings.shape)
     combined_embeddings_np = np.array(combined_embeddings)
     print(combined_embeddings_np.shape)
     metric = 'cosine'
     method = 'average'
     dists = pdist(combined_embeddings_np, metric=metric)
     Z = linkage(dists, method=method, metric=metric)
-
+    sys.exit() 
     distance_crit = Z[-max_number_senses, 2]
 
     labels = fcluster(Z, distance_crit,
