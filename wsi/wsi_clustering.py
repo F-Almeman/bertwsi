@@ -71,7 +71,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]  
     for d in definitions[:3]:
-      pritn(d)
+      print(d)
     
     sys.exit()
     definitions_embeddings = model.encode(definitions)
