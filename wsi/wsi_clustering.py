@@ -37,7 +37,6 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         vec_1 = vec.A1    # to convert from matrix to array
         #embed = np.concatenate((def_vec, vec_1))
         #embed = np.kron(def_vec, vec_1)
-        print("XXXXXXXXXXXXXXXXXXXXX")
         embed = np.multiply.outer(def_vec, vec_1).T
         new_embed.append(embed)
 
@@ -71,7 +70,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
     combined_embeddings_np = np.array(combined_embeddings)
-
+    print(combined_embeddings_np.shape)
     metric = 'cosine'
     method = 'average'
     dists = pdist(combined_embeddings_np, metric=metric)
