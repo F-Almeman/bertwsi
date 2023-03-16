@@ -35,7 +35,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert from matrix to array
-        embed = np.concatenate((def_vec, vec_1))
+        #embed = np.concatenate((def_vec, vec_1))
+        #embed = np.kron(def_vec, vec_1)
+        embed = np.multiply.outer(def_vec, vec_1)
         new_embed.append(embed)
 
       return new_embed
@@ -56,8 +58,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
     
-    #model = SentenceTransformer('all-MiniLM-L6-v2')
-    model = SentenceTransformer('sentence-transformers/LaBSE')
+    model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]  
     definitions_embeddings = model.encode(definitions)
     
