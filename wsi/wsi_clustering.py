@@ -41,8 +41,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         print(def_vec.shape)
         embed = np.concatenate((def_vec, vec_1))
         print(embed.shape)
-        #embed = np.kron(def_vec, vec_1)
-        embed_1 = np.multiply.outer(def_vec, vec_1)
+        embed_1 = np.kron(def_vec, vec_1)
+        #embed_1 = np.multiply.outer(def_vec, vec_1)
         print(embed_1.shape)
         new_embed.append(embed_1)
 
