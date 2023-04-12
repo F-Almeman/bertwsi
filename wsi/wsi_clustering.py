@@ -35,7 +35,6 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert from matrix to array
-        vec_1 = (vec_1-np.min(vec_1))/(np.max(vec_1)-np.min(vec_1))
         embed = np.concatenate((def_vec, vec_1))
         embed_1 = np.kron(def_vec, vec_1)
         new_embed.append(embed_1)
@@ -80,26 +79,51 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     labels = fcluster(Z, distance_crit,
                       'distance') - 1
 
+    print("\nlabels: ")
+    print(labels[:10])
+    
     n_senses = np.max(labels) + 1
-
+    print("\nn_senses: "+str(n_senses))
+    
     senses_n_domminates = Counter()
     instance_senses = {}
     for i, inst_id in enumerate(inst_ids_ordered):
+        
+        print("\nid:")
+        print(i)
         inst_id_clusters = Counter(labels[i * n_represent:
                                           (i + 1) * n_represent])
         instance_senses[inst_id] = inst_id_clusters
+        print("\ninstance_senses:")
+        print(instance_senses)
         senses_n_domminates[inst_id_clusters.most_common()[0][0]] += 1
+        print("\nsenses_n_domminates")
+        print(senses_n_domminates)
 
     big_senses = [x for x in senses_n_domminates if senses_n_domminates[x] >= min_sense_instances]
-
+    print("\nbig_senses:")
+    print(big_senses)
+    
     sense_means = np.zeros((n_senses, transformed.shape[1]))
+    print("\nsense_means: ")
+    print(sense_means)
+    
     for sense_idx in range(n_senses):
+        print("\nsense_idx:")
+        print(sense_idx)
+        
         idxs_this_sense = np.where(labels == sense_idx)
+        print("\nidxs_this_sense:")
+        print(idxs_this_sense)
         cluster_center = np.mean(np.array(transformed)[idxs_this_sense], 0)
+        print("\ncluster_center:")
+        print(cluster_center)
         sense_means[sense_idx] = cluster_center
 
     sense_remapping = {}
     if min_sense_instances > 0:
+        print("\nmin_sense_instances:")
+        print(min_sense_instances)
         dists = cdist(sense_means, sense_means, metric='cosine')
         closest_senses = np.argsort(dists, )[:, ]
 
@@ -107,31 +131,51 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
             for closest_sense in closest_senses[sense_idx]:
                 if closest_sense in big_senses:
                     sense_remapping[sense_idx] = closest_sense
+                    print("\nsense_remapping:")
+                    print(sense_remapping)
                     break
         new_order_of_senses = list(set(sense_remapping.values()))
         sense_remapping = dict((k, new_order_of_senses.index(v)) for k, v in sense_remapping.items())
 
         labels = np.array([sense_remapping[x] for x in labels])
-
+        print("\nlabels")
+        print(labels)
 
     best_instance_for_sense = {}
     senses = {}
     for inst_id, inst_id_clusters in instance_senses.items():
+        print("\ninst_id:")
+        print(inst_id)
+        print("\ninst_id_clusters:")
+        print(inst_id_clusters)
         senses_inst = {}
         for sense_idx, count in inst_id_clusters.most_common():
+            print("\nsense_idx:")
+            print(sense_idx)
+            print("\ncount:")
+            print(count)
             if sense_remapping:
                 sense_idx = sense_remapping[sense_idx]
+                print("\nsense_idx:")
+                print(sense_idx)
             senses_inst[f'{lemma}.sense.{sense_idx}'] = count
             if sense_idx not in best_instance_for_sense:
                 best_instance_for_sense[sense_idx] = (count, inst_id)
+                print("\nbest_instance_for_sense")
+                print(best_instance_for_sense[sense_idx])
             else:
                 current_count, current_best_inst = best_instance_for_sense[sense_idx]
                 if current_count < count:
                     best_instance_for_sense[sense_idx] = (count, inst_id)
+                    print("\nbest_instance_for_sense")
+                    print(best_instance_for_sense[sense_idx])
 
         senses[inst_id] = senses_inst
 
     label_count = Counter(labels)
+    print("\nlabel_count")
+    print(label_count)
+    sys. exit()
     statistics = []
     if len(label_count) > 1 and explain_features:
         svm = LinearSVC(class_weight='balanced', penalty='l1', dual=False)
