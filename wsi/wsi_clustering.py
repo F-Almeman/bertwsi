@@ -38,7 +38,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
         vec_1 = vec_1[vec_1 != 0] # to extract the values not equal to zero
         vec_1 = (vec_1-np.min(vec_1))/(np.max(vec_1)-np.min(vec_1)) # min max normalization
         embed = np.concatenate((def_vec, vec_1))
-        new_embed.append(embed_1)
+        new_embed.append(embed)
 
       return new_embed
     
