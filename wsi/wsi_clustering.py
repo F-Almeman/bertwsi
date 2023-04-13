@@ -35,8 +35,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert from matrix to array
+        vec_1 = vec_1[vec_1 != 0] # to extract the values not equal to zero
+        vec_1 = (vec_1-np.min(vec_1))/(np.max(vec_1)-np.min(vec_1)) # min max normalization
         embed = np.concatenate((def_vec, vec_1))
-        embed_1 = np.kron(def_vec, vec_1)
         new_embed.append(embed_1)
 
       return new_embed
@@ -175,7 +176,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     label_count = Counter(labels)
     print("\nlabel_count")
     print(label_count)
-    sys. exit()
+    #sys. exit()
     statistics = []
     if len(label_count) > 1 and explain_features:
         svm = LinearSVC(class_weight='balanced', penalty='l1', dual=False)
