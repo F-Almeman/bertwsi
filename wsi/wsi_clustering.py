@@ -70,13 +70,13 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     for i, inst_id in enumerate(inst_ids_ordered):
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
         print("combined_embed")
-        print(combined_embed.shape)
+        print(combined_embed[0].shape)
         combined_embeddings.append(combined_embed)
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
+    combined_embeddings_np = np.array(combined_embeddings)
     print("combined_embeddings")
     print(combined_embeddings.shape)
-    combined_embeddings_np = np.array(combined_embeddings)
     metric = 'cosine'
     method = 'average'
     dists = pdist(combined_embeddings_np, metric=metric)
