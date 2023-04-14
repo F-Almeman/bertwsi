@@ -34,11 +34,11 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     def combine(rep_vec, def_vec):                         
       new_embed = []
       for vec in rep_vec:
+        print(vec.shape)
         vec_1 = vec.A1    # to convert from matrix to array
         vec_1 = vec_1[vec_1 != 0] # to extract the values not equal to zero
         vec_1 = (vec_1-np.min(vec_1))/(np.max(vec_1)-np.min(vec_1)) # min max normalization
         embed = np.concatenate((def_vec, vec_1))
-        print(embed.shape)
         new_embed.append(embed)
 
       return new_embed
@@ -59,6 +59,8 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     else:
         transformed = TfidfTransformer(norm=None).fit_transform(rep_mat).todense()
     
+    print("transformed")
+    print(transformed.shape)
     model = SentenceTransformer('all-MiniLM-L6-v2')
     definitions = [inst_id_to_definition[x] for x in inst_ids_ordered]  
     definitions_embeddings = model.encode(definitions)
@@ -67,9 +69,12 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     combined_embeddings = []
     for i, inst_id in enumerate(inst_ids_ordered):
         combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
+        print("combined_embed")
+        print(combined_embed.shape)
         combined_embeddings.append(combined_embed)
     
     combined_embeddings = [y for x in combined_embeddings for y in x]
+    print("combined_embeddings")
     print(combined_embeddings.shape)
     combined_embeddings_np = np.array(combined_embeddings)
     metric = 'cosine'
