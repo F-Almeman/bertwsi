@@ -67,7 +67,7 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
    
     combined_embeddings = []
     for i, inst_id in enumerate(inst_ids_ordered):
-        combined_embed = combine(pca, transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
+        combined_embed = combine(transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
         print("combined_embed")
         print(combined_embed[0].shape)
         combined_embeddings.append(combined_embed)
