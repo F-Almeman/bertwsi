@@ -35,11 +35,9 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     def combine(pca, rep_vec, def_vec):                         
       new_embed = []
       for vec in rep_vec:
-        print(type(vec))
-        print(vec.shape)
-        vec = vec.resahpe(-1, 1)
-        vec_1 = pca.fit_transform(vec)
         vec_1 = vec.A1    # to convert from matrix to array
+        vec_1 = vec_1.resahpe(-1, 1)
+        vec_1 = pca.fit_transform(vec_1)
         #vec_1 = (vec_1-np.min(vec_1))/(np.max(vec_1)-np.min(vec_1)) # min max normalization
         embed = np.concatenate((def_vec, vec_1))
         new_embed.append(embed)
