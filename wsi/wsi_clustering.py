@@ -10,6 +10,7 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
 from sentence_transformers import SentenceTransformer
+from sklearn import preprocessing
 import sys
 import pickle
 
