@@ -10,7 +10,6 @@ from scipy.cluster.hierarchy import linkage, fcluster
 from sklearn.svm import LinearSVC
 from sklearn.preprocessing import normalize
 from sentence_transformers import SentenceTransformer
-from sklearn.decomposition import PCA
 import sys
 import pickle
 
@@ -32,12 +31,11 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     :return: map from SemEval instance id to soft membership of clusters and their weight
     """
     
-    def combine(pca, rep_vec, def_vec):                         
+    def combine(rep_vec, def_vec):                         
       new_embed = []
       for vec in rep_vec:
         vec_1 = vec.A1    # to convert from matrix to array
-        vec_1 = vec_1.reshape(-1, 1)
-        vec_1 = pca.fit_transform(vec_1)
+        vec_1 = preprocessing.normalize(vec_1)
         #vec_1 = (vec_1-np.min(vec_1))/(np.max(vec_1)-np.min(vec_1)) # min max normalization
         embed = np.concatenate((def_vec, vec_1))
         new_embed.append(embed)
@@ -68,7 +66,6 @@ def cluster_inst_ids_representatives(inst_ids_to_representatives: Dict[str, List
     
    
     combined_embeddings = []
-    pca = PCA(n_components = 15)
     for i, inst_id in enumerate(inst_ids_ordered):
         combined_embed = combine(pca, transformed[i * n_represent:(i + 1) * n_represent], definitions_embeddings[i])
         print("combined_embed")
